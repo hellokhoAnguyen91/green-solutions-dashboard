@@ -2,9 +2,11 @@
 
 Hệ thống Quản lý Dự án & Báo cáo Tác động Môi trường (EPR & ESG) chuyên nghiệp, tối ưu hóa cho cuộc thi và doanh nghiệp phát triển bền vững.
 
-## 🚀 Live Demo
-- **GitHub Pages**: [https://hellokhoAnguyen91.github.io/green-solutions-dashboard/](https://hellokhoAnguyen91.github.io/green-solutions-dashboard/)
-- **Render.com**: Sẵn sàng cấu hình qua `render.yaml` (Static Site)
+## 🚀 Live Demo & Deployment
+- **🌐 GitHub Pages (Trực tiếp)**: [https://hellokhoanguyen91.github.io/green-solutions-dashboard/](https://hellokhoanguyen91.github.io/green-solutions-dashboard/)
+- **⚡ Deploy lên Render (1-Click)**:
+  
+  [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/hellokhoAnguyen91/green-solutions-dashboard)
 
 ---
 
@@ -30,22 +32,23 @@ Hệ thống Quản lý Dự án & Báo cáo Tác động Môi trường (EPR & 
 
 ---
 
-## 🛠️ Triển khai (Deployment)
+## 🛠️ Hướng dẫn Triển khai (Deployment)
 
-### 1. GitHub Pages
-Repo này đã cấu hình sẵn file `index.html` ở thư mục gốc. GitHub Pages sẽ tự động phục vụ tại:
+### 1. GitHub Pages (Đã kích hoạt & Đang chạy)
+Trang web đã được kích hoạt trực tiếp từ nhánh `main` và chạy vĩnh viễn tại:
 ```text
-https://hellokhoAnguyen91.github.io/green-solutions-dashboard/
+https://hellokhoanguyen91.github.io/green-solutions-dashboard/
 ```
 
 ### 2. Render.com
-1. Đăng nhập vào [Render.com](https://render.com).
-2. Chọn **New +** -> **Static Site**.
-3. Kết nối với repository `hellokhoAnguyen91/green-solutions-dashboard`.
-4. Render sẽ tự động đọc file `render.yaml` hoặc bạn chỉ cần đặt:
-   - **Publish directory**: `./`
-   - **Build command**: *(để trống)*
-5. Nhấn **Create Static Site** để trang web được phát trực tuyến.
+Repo đã tích hợp sẵn tệp cấu hình `render.yaml`. Bạn có thể triển khai lên Render bằng một trong hai cách:
+- **Cách 1 (Nhanh nhất)**: Bấm trực tiếp vào nút **[Deploy to Render](https://render.com/deploy?repo=https://github.com/hellokhoAnguyen91/green-solutions-dashboard)** ở trên.
+- **Cách 2**: 
+  1. Đăng nhập [dashboard.render.com](https://dashboard.render.com).
+  2. Chọn **New +** -> **Static Site**.
+  3. Chọn repo `hellokhoAnguyen91/green-solutions-dashboard`.
+  4. Render sẽ tự động nhận diện cấu hình tĩnh (`Publish directory: ./`).
+  5. Bấm **Create Static Site**.
 
 ---
 
