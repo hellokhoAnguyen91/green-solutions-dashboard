@@ -2962,6 +2962,29 @@ const Download = p => /*#__PURE__*/React.createElement(IconWrapper, p, /*#__PURE
   x2: "12",
   y2: "3"
 }));
+
+const Cloud = p => /*#__PURE__*/React.createElement(IconWrapper, p, /*#__PURE__*/React.createElement("path", {
+  d: "M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"
+}));
+const CloudOff = p => /*#__PURE__*/React.createElement(IconWrapper, p, /*#__PURE__*/React.createElement("path", {
+  d: "m2 2 20 20"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M5.782 5.782A7 7 0 0 0 9 19h8.5a4.5 4.5 0 0 0 1.307-.193"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M21.532 16.5A4.5 4.5 0 0 0 17.5 10h-1.79A7.008 7.008 0 0 0 10 5.07"
+}));
+const Share2 = p => /*#__PURE__*/React.createElement(IconWrapper, p, /*#__PURE__*/React.createElement("circle", {
+  cx: "18", cy: "5", r: "3"
+}), /*#__PURE__*/React.createElement("circle", {
+  cx: "6", cy: "12", r: "3"
+}), /*#__PURE__*/React.createElement("circle", {
+  cx: "18", cy: "19", r: "3"
+}), /*#__PURE__*/React.createElement("line", {
+  x1: "8.59", y1: "13.51", x2: "15.42", y2: "17.49"
+}), /*#__PURE__*/React.createElement("line", {
+  x1: "15.41", y1: "6.51", x2: "8.59", y2: "10.49"
+}));
+
 const RefreshCw = p => /*#__PURE__*/React.createElement(IconWrapper, p, /*#__PURE__*/React.createElement("path", {
   d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
 }), /*#__PURE__*/React.createElement("path", {
@@ -2972,440 +2995,248 @@ const RefreshCw = p => /*#__PURE__*/React.createElement(IconWrapper, p, /*#__PUR
   d: "M8 16H3v5"
 }));
 
-// --- DỮ LIỆU MẪU BAN ĐẦU ---
-const initialPhases = [{
-  id: 1,
-  phase: '1. Khởi động',
-  date: '15/9 - 30/9',
-  desc: 'Truyền thông & Khai mạc',
-  status: 'active'
-}, {
-  id: 2,
-  phase: '2. Sơ khảo',
-  date: '01/10 - 23/10',
-  desc: 'Nhận bài & Chấm thi',
-  status: 'pending'
-}, {
-  id: 3,
-  phase: '3. Trải nghiệm',
-  date: '24/10 - 15/11',
-  desc: 'Workshop & Thực tế',
-  status: 'pending'
-}, {
-  id: 4,
-  phase: '4. Chung kết',
-  date: '16/11 - 10/12',
-  desc: 'Thi trực tiếp & Báo cáo',
-  status: 'pending'
-}, {
-  id: 5,
-  phase: '5. Tổng kết',
-  date: 'Trước 15/12',
-  desc: 'Báo cáo & Quyết toán',
-  status: 'pending'
-}];
-const initialTasks = [{
-  id: 1,
-  title: 'Truyền thông, phát động cuộc thi',
-  phase: '1. Khởi động (15/9 - 30/9)',
-  category: 'Truyền thông',
-  date: '15/09/2026 - 30/09/2026',
-  assignees: ['BTC', 'P.QTTT'],
-  status: 'in-progress',
-  evidence: [],
-  subtasks: [{
-    id: 11,
-    title: 'Viết bài PR trên Fanpage',
-    assignee: 'Thành viên Truyền thông',
-    isCompleted: true
-  }, {
-    id: 12,
-    title: 'Gửi email hàng loạt cho sinh viên',
-    assignee: 'P.QTTT',
-    isCompleted: false
-  }]
-}, {
-  id: 2,
-  title: 'Tổ chức Lễ khai mạc',
-  phase: '1. Khởi động (15/9 - 30/9)',
-  category: 'Sự kiện',
-  date: '15/09/2026 - 30/09/2026',
-  assignees: ['BTC', 'INSEE'],
-  status: 'pending',
-  evidence: [],
-  subtasks: []
-}, {
-  id: 3,
-  title: 'Nhận đăng ký dự thi (Vòng Sơ khảo)',
-  phase: '2. Sơ khảo (01/10 - 23/10)',
-  category: 'Sự kiện',
-  date: '01/10/2026 - 15/10/2026',
-  assignees: ['BTC'],
-  status: 'pending',
-  evidence: [],
-  subtasks: []
-}, {
-  id: 4,
-  title: 'Chấm Vòng 1 – Sơ khảo',
-  phase: '2. Sơ khảo (01/10 - 23/10)',
-  category: 'Chuyên môn',
-  date: '16/10/2026 - 23/10/2026',
-  assignees: ['BGK', 'BTC'],
-  status: 'pending',
-  evidence: [],
-  subtasks: []
-}];
-const initialSponsors = [{
-  id: 1,
-  name: 'INSEE Việt Nam',
-  role: 'Nhà tài trợ chính',
-  representative: 'Bà Đinh Thị Yến',
-  phone: '0901234567',
-  email: 'yen.dinh@insee.com',
-  supportTypes: {
-    cash: true,
-    inKind: true
-  },
-  inKindDetails: 'Chuyên gia BGK, Hỗ trợ tham quan nhà máy',
-  pledgedAmount: 35000000
-}, {
-  id: 2,
-  name: 'Phòng KHCN (ĐH CN KT TP.HCM)',
-  role: 'Đơn vị hỗ trợ',
-  representative: 'PGS.TS Vũ Văn Phong',
-  phone: '0283899999',
-  email: 'khcn@ute.edu.vn',
-  supportTypes: {
-    cash: true,
-    inKind: false
-  },
-  inKindDetails: '',
-  pledgedAmount: 10000000
-}];
-const initialTransactions = [{
-  id: 1,
-  date: '2026-09-10',
-  type: 'THU',
-  amount: 10000000,
-  source: 'Phòng KHCN (ĐH CN KT TP.HCM)',
-  note: 'Chuyển khoản hỗ trợ Đợt 1'
-}, {
-  id: 2,
-  date: '2026-09-12',
-  type: 'THU',
-  amount: 5000000,
-  source: 'Quỹ Hoạt động Khoa',
-  note: 'Tạm ứng tiền mặt'
-}, {
-  id: 3,
-  date: '2026-09-14',
-  type: 'CHI',
-  amount: 1700000,
-  source: 'In ấn tài liệu, standee',
-  note: 'Thanh toán nhà in ABC (HĐ 123)'
-}, {
-  id: 4,
-  date: '2026-09-20',
-  type: 'THU',
-  amount: 15000000,
-  source: 'INSEE Việt Nam',
-  note: 'Chuyển khoản tài trợ Đợt 1'
-}];
-const initialBudgetItems = [{
-  id: 1,
-  name: 'Giải Nhất (Quán quân)',
-  unit: 'Giải',
-  price: 6000000,
-  qty: 1,
-  total: 6000000,
-  type: 'Ký nhận',
-  category: '1. GIẢI THƯỞNG',
-  evidence: []
-}, {
-  id: 2,
-  name: 'Giải Nhì',
-  unit: 'Giải',
-  price: 4000000,
-  qty: 1,
-  total: 4000000,
-  type: 'Ký nhận',
-  category: '1. GIẢI THƯỞNG',
-  evidence: []
-}, {
-  id: 3,
-  name: 'Thù lao BGK Sơ khảo',
-  unit: 'Người',
-  price: 2000000,
-  qty: 3,
-  total: 6000000,
-  type: 'Ký nhận',
-  category: '2. CHUYÊN MÔN',
-  evidence: []
-}, {
-  id: 4,
-  name: 'In ấn (chứng nhận, thẻ đeo...)',
-  unit: 'Bộ',
-  price: 500000,
-  qty: 1,
-  total: 500000,
-  type: 'Hóa đơn',
-  category: '3. TỔ CHỨC & HẬU CẦN',
-  evidence: []
-}];
-const extractedBudgetItems = [{
-  id: 101,
-  name: '1.1 Giải Nhất (Quán quân)',
-  unit: 'Giải',
-  price: 6000000,
-  qty: 1,
-  total: 6000000,
-  type: 'Ký nhận',
-  category: '1. GIẢI THƯỞNG',
-  evidence: []
-}, {
-  id: 102,
-  name: '1.2 Giải Nhì',
-  unit: 'Giải',
-  price: 4000000,
-  qty: 1,
-  total: 4000000,
-  type: 'Ký nhận',
-  category: '1. GIẢI THƯỞNG',
-  evidence: []
-}, {
-  id: 103,
-  name: '1.3 Giải Ba',
-  unit: 'Giải',
-  price: 2000000,
-  qty: 2,
-  total: 4000000,
-  type: 'Ký nhận',
-  category: '1. GIẢI THƯỞNG',
-  evidence: []
-}, {
-  id: 104,
-  name: '1.4 Giải Khuyến khích',
-  unit: 'Giải',
-  price: 1000000,
-  qty: 2,
-  total: 2000000,
-  type: 'Ký nhận',
-  category: '1. GIẢI THƯỞNG',
-  evidence: []
-}, {
-  id: 105,
-  name: '1.5 Chiến binh Xanh',
-  unit: 'Giải',
-  price: 200000,
-  qty: 5,
-  total: 1000000,
-  type: 'Ký nhận',
-  category: '1. GIẢI THƯỞNG',
-  evidence: []
-}, {
-  id: 106,
-  name: '1.6 Biệt đội Xanh',
-  unit: 'Giải',
-  price: 1000000,
-  qty: 2,
-  total: 2000000,
-  type: 'Ký nhận',
-  category: '1. GIẢI THƯỞNG',
-  evidence: []
-}, {
-  id: 107,
-  name: '2.1 Thù lao BGK Vòng Sơ khảo',
-  unit: 'Người',
-  price: 500000,
-  qty: 3,
-  total: 1500000,
-  type: 'Ký nhận',
-  category: '2. CÔNG TÁC RA ĐỀ VÀ CHẤM THI',
-  evidence: []
-}, {
-  id: 108,
-  name: '2.2 Thù lao BGK Vòng Chung kết',
-  unit: 'Người',
-  price: 1000000,
-  qty: 5,
-  total: 5000000,
-  type: 'Ký nhận',
-  category: '2. CÔNG TÁC RA ĐỀ VÀ CHẤM THI',
-  evidence: []
-}, {
-  id: 109,
-  name: '2.3 Thù lao Diễn giả kỹ năng thuyết trình',
-  unit: 'Người',
-  price: 1000000,
-  qty: 1,
-  total: 1000000,
-  type: 'Ký nhận',
-  category: '2. CÔNG TÁC RA ĐỀ VÀ CHẤM THI',
-  evidence: []
-}, {
-  id: 110,
-  name: '2.4 Thù lao Diễn giả buổi Workshop về EPR',
-  unit: 'Người',
-  price: 1000000,
-  qty: 1,
-  total: 1000000,
-  type: 'Ký nhận',
-  category: '2. CÔNG TÁC RA ĐỀ VÀ CHẤM THI',
-  evidence: []
-}, {
-  id: 111,
-  name: '3.1 Quản trị fanpage cuộc thi',
-  unit: 'Giờ',
-  price: 25000,
-  qty: 20,
-  total: 500000,
-  type: 'Ký nhận',
-  category: '3. CÔNG TÁC TỔ CHỨC CUỘC THI',
-  evidence: []
-}, {
-  id: 112,
-  name: '3.2 Tin bài truyền thông trên fanpage, web',
-  unit: 'Bài',
-  price: 150000,
-  qty: 20,
-  total: 3000000,
-  type: 'Ký nhận',
-  category: '3. CÔNG TÁC TỔ CHỨC CUỘC THI',
-  evidence: []
-}, {
-  id: 113,
-  name: '3.3 Xây dựng video truyền thông các hoạt động',
-  unit: 'Buổi',
-  price: 200000,
-  qty: 5,
-  total: 1000000,
-  type: 'Ký nhận',
-  category: '3. CÔNG TÁC TỔ CHỨC CUỘC THI',
-  evidence: []
-}, {
-  id: 114,
-  name: '3.4 Chụp hình tại sự kiện: workshop, HĐ Xanh',
-  unit: 'Buổi',
-  price: 200000,
-  qty: 5,
-  total: 1000000,
-  type: 'Ký nhận',
-  category: '3. CÔNG TÁC TỔ CHỨC CUỘC THI',
-  evidence: []
-}, {
-  id: 115,
-  name: '3.5 Người dẫn chương trình (MC)',
-  unit: 'Buổi',
-  price: 500000,
-  qty: 2,
-  total: 1000000,
-  type: 'Ký nhận',
-  category: '3. CÔNG TÁC TỔ CHỨC CUỘC THI',
-  evidence: []
-}, {
-  id: 116,
-  name: '3.6 Công tác trực kỹ thuật hội trường, phòng họp',
-  unit: 'Giờ',
-  price: 25000,
-  qty: 20,
-  total: 500000,
-  type: 'Ký nhận',
-  category: '3. CÔNG TÁC TỔ CHỨC CUỘC THI',
-  evidence: []
-}, {
-  id: 117,
-  name: '3.7 Văn nghệ Vòng Chung kết',
-  unit: 'Tiết mục',
-  price: 500000,
-  qty: 2,
-  total: 1000000,
-  type: 'Ký nhận',
-  category: '3. CÔNG TÁC TỔ CHỨC CUỘC THI',
-  evidence: []
-}, {
-  id: 118,
-  name: '3.8 Điều phối tại sự kiện thi, các buổi workshop',
-  unit: 'Giờ',
-  price: 10000,
-  qty: 150,
-  total: 1500000,
-  type: 'Ký nhận',
-  category: '3. CÔNG TÁC TỔ CHỨC CUỘC THI',
-  evidence: []
-}, {
-  id: 119,
-  name: '3.9 In ấn (số báo danh, chứng nhận, thẻ đeo...)',
-  unit: 'Bộ',
-  price: 500000,
-  qty: 1,
-  total: 500000,
-  type: 'Hóa đơn',
-  category: '3. CÔNG TÁC TỔ CHỨC CUỘC THI',
-  evidence: []
-}, {
-  id: 120,
-  name: '3.10 In standee khổ 0.8 x 2m',
-  unit: 'Cái',
-  price: 300000,
-  qty: 2,
-  total: 600000,
-  type: 'Hóa đơn',
-  category: '3. CÔNG TÁC TỔ CHỨC CUỘC THI',
-  evidence: []
-}, {
-  id: 121,
-  name: '3.11 Khung standee khổ 0.8 x 2m',
-  unit: 'Cái',
-  price: 300000,
-  qty: 2,
-  total: 600000,
-  type: 'Hóa đơn',
-  category: '3. CÔNG TÁC TỔ CHỨC CUỘC THI',
-  evidence: []
-}, {
-  id: 122,
-  name: '3.12 Bảng giải thưởng',
-  unit: 'Cái',
-  price: 100000,
-  qty: 13,
-  total: 1300000,
-  type: 'Hóa đơn',
-  category: '3. CÔNG TÁC TỔ CHỨC CUỘC THI',
-  evidence: []
-}, {
-  id: 123,
-  name: '3.13 Quà tặng Ban giám khảo, đại biểu',
-  unit: 'Phần',
-  price: 200000,
-  qty: 15,
-  total: 3000000,
-  type: 'Hóa đơn',
-  category: '3. CÔNG TÁC TỔ CHỨC CUỘC THI',
-  evidence: []
-}, {
-  id: 124,
-  name: '3.14 Teabreak (2 buổi, 100 người/buổi)',
-  unit: 'Phần',
-  price: 20000,
-  qty: 200,
-  total: 4000000,
-  type: 'Hóa đơn',
-  category: '3. CÔNG TÁC TỔ CHỨC CUỘC THI',
-  evidence: []
-}, {
-  id: 125,
-  name: '3.15 Hỗ trợ trực quầy hoạt động Hành động Xanh',
-  unit: 'Giờ',
-  price: 10000,
-  qty: 300,
-  total: 3000000,
-  type: 'Ký nhận',
-  category: '3. CÔNG TÁC TỔ CHỨC CUỘC THI',
-  evidence: []
-}];
 
-// --- LOCAL STORAGE HELPER ---
+// --- DỮ LIỆU MẪU BAN ĐẦU (ĐÃ CẬP NHẬT MỚI NHẤT) ---
+const initialPhases = [
+  {
+    "id": 1,
+    "phase": "1. Khởi động",
+    "date": "15/9 - 30/9",
+    "desc": "Truyền thông & Khai mạc",
+    "status": "active"
+  },
+  {
+    "id": 2,
+    "phase": "2. Sơ khảo",
+    "date": "01/10 - 23/10",
+    "desc": "Nhận bài & Chấm thi",
+    "status": "pending"
+  },
+  {
+    "id": 3,
+    "phase": "3. Trải nghiệm",
+    "date": "24/10 - 15/11",
+    "desc": "Workshop & Thực tế",
+    "status": "pending"
+  },
+  {
+    "id": 4,
+    "phase": "4. Chung kết",
+    "date": "16/11 - 10/12",
+    "desc": "Thi trực tiếp & Báo cáo",
+    "status": "pending"
+  },
+  {
+    "id": 5,
+    "phase": "5. Tổng kết",
+    "date": "Trước 15/12",
+    "desc": "Báo cáo & Quyết toán",
+    "status": "pending"
+  }
+];
+const initialTasks = [
+  {
+    "id": 1,
+    "title": "Truyền thông, phát động cuộc thi",
+    "phase": "1. Khởi động (15/9 - 30/9)",
+    "category": "Truyền thông",
+    "date": "15/09/2026 - 30/09/2026",
+    "assignees": [
+      "BTC",
+      "P.QTTT"
+    ],
+    "status": "in-progress",
+    "evidence": [],
+    "subtasks": [
+      {
+        "id": 11,
+        "title": "Viết bài PR trên Fanpage",
+        "assignee": "Thành viên Truyền thông",
+        "isCompleted": true
+      },
+      {
+        "id": 12,
+        "title": "Gửi email hàng loạt cho sinh viên",
+        "assignee": "P.QTTT",
+        "isCompleted": false
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Tổ chức Lễ khai mạc",
+    "phase": "1. Khởi động (15/9 - 30/9)",
+    "category": "Sự kiện",
+    "date": "15/09/2026 - 30/09/2026",
+    "assignees": [
+      "BTC",
+      "INSEE"
+    ],
+    "status": "pending",
+    "evidence": [],
+    "subtasks": []
+  },
+  {
+    "id": 3,
+    "title": "Nhận đăng ký dự thi (Vòng Sơ khảo)",
+    "phase": "2. Sơ khảo (01/10 - 23/10)",
+    "category": "Sự kiện",
+    "date": "01/10/2026 - 15/10/2026",
+    "assignees": [
+      "BTC"
+    ],
+    "status": "pending",
+    "evidence": [],
+    "subtasks": []
+  },
+  {
+    "id": 4,
+    "title": "Chấm Vòng 1 – Sơ khảo",
+    "phase": "2. Sơ khảo (01/10 - 23/10)",
+    "category": "Chuyên môn",
+    "date": "16/10/2026 - 23/10/2026",
+    "assignees": [
+      "BGK",
+      "BTC"
+    ],
+    "status": "pending",
+    "evidence": [],
+    "subtasks": []
+  }
+];
+const initialSponsors = [
+  {
+    "id": 1,
+    "name": "INSEE Việt Nam",
+    "role": "Nhà tài trợ chính",
+    "representative": "Bà Đinh Thị Yến",
+    "phone": "0901234567",
+    "email": "yen.dinh@insee.com",
+    "supportTypes": {
+      "cash": true,
+      "inKind": true
+    },
+    "inKindDetails": "Chuyên gia BGK, Hỗ trợ tham quan nhà máy",
+    "pledgedAmount": 35000000
+  },
+  {
+    "id": 2,
+    "name": "Phòng KHCN (ĐH CN KT TP.HCM)",
+    "role": "Đơn vị hỗ trợ",
+    "representative": "PGS.TS Vũ Văn Phong",
+    "phone": "0283899999",
+    "email": "khcn@ute.edu.vn",
+    "supportTypes": {
+      "cash": true,
+      "inKind": false
+    },
+    "inKindDetails": "",
+    "pledgedAmount": 10000000
+  }
+];
+const initialTransactions = [
+  {
+    "id": 1,
+    "date": "2026-09-10",
+    "type": "THU",
+    "amount": 10000000,
+    "source": "Phòng KHCN (ĐH CN KT TP.HCM)",
+    "note": "Chuyển khoản hỗ trợ Đợt 1"
+  },
+  {
+    "id": 2,
+    "date": "2026-09-12",
+    "type": "THU",
+    "amount": 5000000,
+    "source": "Quỹ Hoạt động Khoa",
+    "note": "Tạm ứng tiền mặt"
+  },
+  {
+    "id": 3,
+    "date": "2026-09-14",
+    "type": "CHI",
+    "amount": 1700000,
+    "source": "In ấn tài liệu, standee",
+    "note": "Thanh toán nhà in ABC (HĐ 123)"
+  },
+  {
+    "id": 4,
+    "date": "2026-09-20",
+    "type": "THU",
+    "amount": 15000000,
+    "source": "INSEE Việt Nam",
+    "note": "Chuyển khoản tài trợ Đợt 1"
+  }
+];
+const initialBudgetItems = [
+  {
+    "id": 1,
+    "name": "Giải Nhất (Quán quân)",
+    "unit": "Giải",
+    "price": 6000000,
+    "qty": 1,
+    "total": 6000000,
+    "type": "Ký nhận",
+    "category": "1. GIẢI THƯỞNG",
+    "evidence": []
+  },
+  {
+    "id": 2,
+    "name": "Giải Nhì",
+    "unit": "Giải",
+    "price": 4000000,
+    "qty": 1,
+    "total": 4000000,
+    "type": "Ký nhận",
+    "category": "1. GIẢI THƯỞNG",
+    "evidence": []
+  },
+  {
+    "id": 3,
+    "name": "Thù lao BGK Sơ khảo",
+    "unit": "Người",
+    "price": 2000000,
+    "qty": 3,
+    "total": 6000000,
+    "type": "Ký nhận",
+    "category": "2. CHUYÊN MÔN",
+    "evidence": []
+  },
+  {
+    "id": 4,
+    "name": "In ấn (chứng nhận, thẻ đeo...)",
+    "unit": "Bộ",
+    "price": 500000,
+    "qty": 1,
+    "total": 500000,
+    "type": "Hóa đơn",
+    "category": "3. TỔ CHỨC & HẬU CẦN",
+    "evidence": []
+  }
+];
+
+// --- LOCAL & CLOUD STORAGE HELPER ---
 const STORAGE_KEY = 'green_solutions_dashboard_data_v2';
+const CLOUD_CONFIG_KEY = 'green_solutions_cloud_config_v2';
+
+function getStoredCloudConfig() {
+  try {
+    const raw = localStorage.getItem(CLOUD_CONFIG_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return {
+    endpoint: '',
+    autoSync: true,
+    lastSyncedAt: null
+  };
+}
+
+function saveStoredCloudConfig(cfg) {
+  try {
+    localStorage.setItem(CLOUD_CONFIG_KEY, JSON.stringify(cfg));
+  } catch (e) {}
+}
+
 function loadStoredData() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -3420,8 +3251,160 @@ function loadStoredData() {
   }
   return null;
 }
+
 function ProjectDashboard() {
   const saved = useMemo(() => loadStoredData(), []);
+  
+  // --- CLOUD SYNC STATE & HOOKS ---
+  const [cloudConfig, setCloudConfig] = useState(() => getStoredCloudConfig());
+  const [syncStatus, setSyncStatus] = useState('idle'); // 'idle' | 'syncing' | 'synced' | 'error'
+  const [syncMessage, setSyncMessage] = useState('');
+  const [showSyncModal, setShowSyncModal] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
+  const [tempEndpoint, setTempEndpoint] = useState(cloudConfig.endpoint || '');
+  const isRemoteSyncingRef = useRef(false);
+  const localUpdatedAtRef = useRef(saved && saved.updatedAt ? saved.updatedAt : Date.now());
+
+  // URL Query Param & Local LAN Detection
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const syncParam = params.get('sync') || params.get('db');
+      if (syncParam && syncParam !== cloudConfig.endpoint) {
+        const newCfg = { ...cloudConfig, endpoint: syncParam.trim(), autoSync: true };
+        setCloudConfig(newCfg);
+        setTempEndpoint(syncParam.trim());
+        saveStoredCloudConfig(newCfg);
+      } else if (!cloudConfig.endpoint) {
+        if (window.location.port === '8080' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.startsWith('192.168.')) {
+          const autoEndpoint = window.location.origin + '/api/data';
+          const newCfg = { ...cloudConfig, endpoint: autoEndpoint, autoSync: true };
+          setCloudConfig(newCfg);
+          setTempEndpoint(autoEndpoint);
+          saveStoredCloudConfig(newCfg);
+        }
+      }
+    } catch (e) {
+      console.warn('Sync detect error:', e);
+    }
+  }, []);
+
+  const getNormalizedEndpoint = url => {
+    if (!url) return '';
+    let clean = url.trim();
+    if (clean.includes('firebaseio.com') || clean.includes('firebasedatabase.app')) {
+      if (!clean.endsWith('.json')) {
+        clean = clean.replace(/\/+$/, '') + '/data.json';
+      }
+    }
+    return clean;
+  };
+
+  const pushDataToRemote = async (customData = null) => {
+    const ep = getNormalizedEndpoint(cloudConfig.endpoint);
+    if (!ep) return;
+    try {
+      setSyncStatus('syncing');
+      setSyncMessage('Đang lưu lên Đám mây...');
+      const now = Date.now();
+      localUpdatedAtRef.current = now;
+      const payload = {
+        version: '2.0',
+        updatedAt: now,
+        updatedBy: role === 'admin' ? 'Quản trị viên (BTC)' : 'Người dùng',
+        data: customData || {
+          phases,
+          tasks,
+          sponsors,
+          transactions,
+          budgetItems
+        }
+      };
+
+      const method = ep.includes('/api/data') ? 'POST' : 'PUT';
+      const res = await fetch(ep, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      setSyncStatus('synced');
+      setSyncMessage('Đã đồng bộ');
+      const updatedCfg = { ...cloudConfig, lastSyncedAt: now };
+      setCloudConfig(updatedCfg);
+      saveStoredCloudConfig(updatedCfg);
+    } catch (e) {
+      console.warn('Lỗi push cloud:', e);
+      setSyncStatus('error');
+      setSyncMessage('Lỗi đồng bộ: ' + e.message);
+    }
+  };
+
+  const pullDataFromRemote = async (force = false) => {
+    const ep = getNormalizedEndpoint(cloudConfig.endpoint);
+    if (!ep) return;
+    try {
+      setSyncStatus('syncing');
+      const res = await fetch(ep);
+      if (!res.ok) {
+        if (res.status === 404 && ep.includes('/api/data')) {
+          await pushDataToRemote();
+          return;
+        }
+        throw new Error('HTTP ' + res.status);
+      }
+      const result = await res.json();
+      if (!result) {
+        await pushDataToRemote();
+        return;
+      }
+
+      const remoteData = result.data || result;
+      const remoteUpdatedAt = Number(result.updatedAt) || 0;
+
+      if (force || remoteUpdatedAt > localUpdatedAtRef.current) {
+        isRemoteSyncingRef.current = true;
+        if (Array.isArray(remoteData.phases)) setPhases(remoteData.phases);
+        if (Array.isArray(remoteData.tasks)) setTasks(remoteData.tasks);
+        if (Array.isArray(remoteData.sponsors)) setSponsors(remoteData.sponsors);
+        if (Array.isArray(remoteData.transactions)) setTransactions(remoteData.transactions);
+        if (Array.isArray(remoteData.budgetItems)) setBudgetItems(remoteData.budgetItems);
+        localUpdatedAtRef.current = remoteUpdatedAt || Date.now();
+        setSyncStatus('synced');
+        setSyncMessage('Đã nhận dữ liệu mới');
+        const updatedCfg = { ...cloudConfig, lastSyncedAt: Date.now() };
+        setCloudConfig(updatedCfg);
+        saveStoredCloudConfig(updatedCfg);
+        setTimeout(() => { isRemoteSyncingRef.current = false; }, 500);
+      } else {
+        setSyncStatus('synced');
+      }
+    } catch (e) {
+      console.warn('Lỗi pull cloud:', e);
+      setSyncStatus('error');
+      setSyncMessage('Không thể tải từ Cloud');
+    }
+  };
+
+  // Initial pull when endpoint changes
+  useEffect(() => {
+    if (cloudConfig.endpoint) {
+      pullDataFromRemote();
+    }
+  }, [cloudConfig.endpoint]);
+
+  // Periodic poll for multi-device sync
+  useEffect(() => {
+    if (!cloudConfig.endpoint || !cloudConfig.autoSync) return;
+    const interval = setInterval(() => {
+      if (!isRemoteSyncingRef.current && syncStatus !== 'syncing') {
+        pullDataFromRemote(false);
+      }
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [cloudConfig.endpoint, cloudConfig.autoSync]);
+
   const [role, setRole] = useState(saved ? saved.role : null);
   const [activeTab, setActiveTab] = useState(saved && saved.activeTab ? saved.activeTab : 'tasks');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(saved ? !!saved.isSidebarCollapsed : false);
@@ -3531,8 +3514,9 @@ function ProjectDashboard() {
   const isAdmin = role === 'admin';
   const isGuestINSEE = role === 'guest_insee';
 
-  // --- AUTO-SAVE TO LOCALSTORAGE ---
+  // --- AUTO-SAVE TO LOCALSTORAGE & CLOUD ---
   useEffect(() => {
+    const now = Date.now();
     try {
       const dataToSave = {
         role,
@@ -3543,13 +3527,23 @@ function ProjectDashboard() {
         tasks,
         sponsors,
         transactions,
-        budgetItems
+        budgetItems,
+        updatedAt: now
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
     } catch (e) {
       console.warn('Lỗi ghi localStorage:', e);
     }
-  }, [role, activeTab, isSidebarCollapsed, viewBy, phases, tasks, sponsors, transactions, budgetItems]);
+
+    if (isRemoteSyncingRef.current) return;
+
+    if (cloudConfig.endpoint && cloudConfig.autoSync) {
+      const timer = setTimeout(() => {
+        pushDataToRemote({ phases, tasks, sponsors, transactions, budgetItems });
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [role, activeTab, isSidebarCollapsed, viewBy, phases, tasks, sponsors, transactions, budgetItems, cloudConfig.endpoint, cloudConfig.autoSync]);
 
   // --- COMMON FORMATTERS & SAFE COMPUTATIONS ---
   const formatMoney = amount => {
@@ -5374,6 +5368,12 @@ function ProjectDashboard() {
     size: 12,
     className: "mr-1"
   }), " Nh\u1EADp file")), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setShowSyncModal(true),
+    className: "w-full py-1.5 px-2 bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-200 border border-emerald-500/30 rounded flex items-center justify-center font-bold text-xs transition-colors mb-1.5"
+  }, /*#__PURE__*/React.createElement(Cloud, {
+    size: 13,
+    className: "mr-1.5 text-emerald-300"
+  }), "Đồng bộ Đám mây (Cloud)"), /*#__PURE__*/React.createElement("button", {
     onClick: handleResetToDefault,
     className: "w-full text-center text-gray-400 hover:text-red-300 text-[11px] pt-1 flex items-center justify-center transition-colors"
   }, /*#__PURE__*/React.createElement(RefreshCw, {
@@ -5433,7 +5433,33 @@ function ProjectDashboard() {
     className: "text-2xl font-extrabold text-gray-900 tracking-tight"
   }, activeTab === 'overview' ? 'Tổng quan Dự án' : activeTab === 'tasks' ? 'Quản lý Tiến độ & Sự kiện' : activeTab === 'sponsors' ? 'Quản lý Tài chính & Dòng tiền' : 'Dự toán chi phí chi tiết'), /*#__PURE__*/React.createElement("p", {
     className: "text-sm text-gray-500 font-medium mt-0.5"
-  }, "D\u1EEF li\u1EC7u \u0111\u01B0\u1EE3c l\u01B0u tr\u1EEF t\u1EF1 \u0111\u1ED9ng tr\xEAn thi\u1EBFt b\u1ECB c\u1EE7a b\u1EA1n."))), /*#__PURE__*/React.createElement("main", {
+  }, cloudConfig.endpoint ? (syncStatus === 'syncing' ? "Đang đồng bộ Đám mây..." : "Đồng bộ Đám mây thời gian thực đang bật.") : "Chế độ lưu cục bộ. Nhấn 'Đồng bộ Đám mây' để kết nối các máy khác.")), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center space-x-3"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => setShowSyncModal(true),
+    className: `flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-bold border transition-all shadow-sm ${
+      cloudConfig.endpoint
+        ? syncStatus === 'syncing'
+          ? 'bg-blue-50 text-blue-700 border-blue-200 animate-pulse'
+          : syncStatus === 'error'
+          ? 'bg-red-50 text-red-700 border-red-200'
+          : 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100'
+        : 'bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100'
+    }`
+  }, /*#__PURE__*/React.createElement(Cloud, {
+    size: 16,
+    className: cloudConfig.endpoint ? "text-emerald-600" : "text-amber-600"
+  }), /*#__PURE__*/React.createElement("span", null,
+    cloudConfig.endpoint
+      ? syncStatus === 'syncing'
+        ? 'Đang đồng bộ...'
+        : syncStatus === 'error'
+        ? 'Lỗi đồng bộ'
+        : 'Đồng bộ Đám mây: BẬT'
+      : 'Bật Đồng bộ Đám mây'
+  ), cloudConfig.endpoint && /*#__PURE__*/React.createElement("span", {
+    className: "w-2 h-2 rounded-full bg-emerald-500 animate-ping ml-1"
+  })))), /*#__PURE__*/React.createElement("main", {
     className: "flex-1 overflow-auto p-3 sm:p-4 md:p-8 relative custom-scrollbar"
   }, /*#__PURE__*/React.createElement("div", {
     className: "max-w-7xl mx-auto pb-6 relative z-0"
@@ -6126,7 +6152,131 @@ function ProjectDashboard() {
     size: 16
   }))))), phases.length === 0 && /*#__PURE__*/React.createElement("p", {
     className: "text-sm text-gray-500 italic text-center py-6 bg-gray-50 rounded-xl border border-dashed border-gray-300"
-  }, "Ch\u01B0a c\xF3 giai \u0111o\u1EA1n n\xE0o \u0111\u01B0\u1EE3c thi\u1EBFt l\u1EADp. H\xE3y th\xEAm m\u1EDBi!")))))));
+  }, "Ch\u01B0a c\xF3 giai \u0111o\u1EA1n n\xE0o \u0111\u01B0\u1EE3c thi\u1EBFt l\u1EADp. H\xE3y th\xEAm m\u1EDBi!"))
+  {/* --- MODAL CLOUD SYNC --- */}
+  {showSyncModal && /*#__PURE__*/React.createElement("div", {
+    className: "fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden animate-fadeIn"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-gradient-to-r from-emerald-50 to-teal-50"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "text-lg font-bold text-gray-900 flex items-center"
+  }, /*#__PURE__*/React.createElement(Cloud, {
+    size: 22,
+    className: "mr-2.5 text-emerald-600"
+  }), "Quản lý Đồng bộ Đám mây (Cloud Sync)"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setShowSyncModal(false),
+    className: "p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-200 rounded-xl transition-colors"
+  }, /*#__PURE__*/React.createElement(X, {
+    size: 20
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "p-6 space-y-5"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: `p-4 rounded-xl border flex items-center justify-between ${
+      cloudConfig.endpoint
+        ? syncStatus === 'error'
+          ? 'bg-red-50 border-red-200 text-red-800'
+          : 'bg-emerald-50 border-emerald-200 text-emerald-800'
+        : 'bg-amber-50 border-amber-200 text-amber-800'
+    }`
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    className: "font-bold text-sm flex items-center"
+  }, cloudConfig.endpoint ? (syncStatus === 'error' ? '⚠️ Kết nối gặp sự cố' : '🟢 Đang kết nối Đám mây') : '🟠 Chế độ Cục bộ (Lưu máy này)'), /*#__PURE__*/React.createElement("p", {
+    className: "text-xs mt-0.5 opacity-80"
+  }, cloudConfig.endpoint ? (cloudConfig.lastSyncedAt ? 'Đồng bộ gần nhất: ' + new Date(cloudConfig.lastSyncedAt).toLocaleTimeString('vi-VN') : 'Sẵn sàng đồng bộ') : 'Dữ liệu chỉ nằm trên trình duyệt máy này. Kết nối Đám mây để các máy khác cùng thấy.')), cloudConfig.endpoint && /*#__PURE__*/React.createElement("span", {
+    className: `px-2.5 py-1 rounded-full text-[11px] font-bold ${syncStatus === 'syncing' ? 'bg-blue-100 text-blue-800 animate-pulse' : 'bg-emerald-200 text-emerald-900'}`
+  }, syncStatus === 'syncing' ? 'Đang lưu...' : 'Realtime')), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
+  }, "Đường dẫn Cloud Database (Firebase / REST API)"), /*#__PURE__*/React.createElement("div", {
+    className: "flex space-x-2"
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: tempEndpoint,
+    onChange: e => setTempEndpoint(e.target.value),
+    placeholder: "https://your-app-default-rtdb.firebaseio.com/data.json",
+    className: "flex-1 p-2.5 border border-gray-300 rounded-xl text-xs font-mono outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: () => {
+      const clean = tempEndpoint.trim();
+      const newCfg = { ...cloudConfig, endpoint: clean, autoSync: true };
+      setCloudConfig(newCfg);
+      saveStoredCloudConfig(newCfg);
+      if (clean) pushDataToRemote();
+      alert(clean ? 'Đã lưu cấu hình và kết nối đồng bộ thành công!' : 'Đã chuyển về chế độ lưu cục bộ.');
+    },
+    className: "px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-colors shadow-sm whitespace-nowrap"
+  }, "Lưu & Kết nối"))), /*#__PURE__*/React.createElement("div", {
+    className: "grid grid-cols-2 gap-3 pt-2"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: async () => {
+      if (!cloudConfig.endpoint) {
+        alert('Vui lòng nhập đường dẫn Cloud Database trước khi đẩy dữ liệu!');
+        return;
+      }
+      await pushDataToRemote();
+      alert('Đã đẩy toàn bộ dữ liệu mới nhất từ máy này lên Đám mây thành công!');
+    },
+    className: "flex items-center justify-center p-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-bold text-xs transition-all shadow-sm"
+  }, /*#__PURE__*/React.createElement(Upload, {
+    size: 15,
+    className: "mr-1.5"
+  }), "Đẩy dữ liệu máy này lên Cloud"), /*#__PURE__*/React.createElement("button", {
+    onClick: async () => {
+      if (!cloudConfig.endpoint) {
+        alert('Vui lòng nhập đường dẫn Cloud Database trước khi tải về!');
+        return;
+      }
+      await pullDataFromRemote(true);
+      alert('Đã tải và cập nhật dữ liệu mới nhất từ Đám mây về máy này!');
+    },
+    className: "flex items-center justify-center p-3 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 font-bold text-xs transition-all shadow-sm"
+  }, /*#__PURE__*/React.createElement(Download, {
+    size: 15,
+    className: "mr-1.5"
+  }), "Kéo dữ liệu từ Cloud về máy")), /*#__PURE__*/React.createElement("div", {
+    className: "pt-2 border-t border-gray-100"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => {
+      if (!cloudConfig.endpoint) {
+        alert('Vui lòng kết nối Cloud trước khi tạo liên kết chia sẻ!');
+        return;
+      }
+      const currentUrl = window.location.origin + window.location.pathname;
+      const shareUrl = currentUrl + '?sync=' + encodeURIComponent(cloudConfig.endpoint);
+      navigator.clipboard.writeText(shareUrl);
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 3000);
+    },
+    className: "w-full flex items-center justify-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 font-bold text-xs transition-colors"
+  }, /*#__PURE__*/React.createElement(Share2, {
+    size: 15,
+    className: "mr-2 text-emerald-600"
+  }), shareCopied ? '✓ Đã sao chép link đồng bộ vào bộ nhớ tạm!' : 'Sao chép link chia sẻ đồng bộ (Gửi cho máy khác mở là tự động kết nối)')), /*#__PURE__*/React.createElement("div", {
+    className: "p-3.5 bg-gray-50 rounded-xl border border-gray-200 text-xs text-gray-600 space-y-1.5"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "font-bold text-gray-800 flex items-center"
+  }, "⚡ Hướng dẫn tạo Firebase Realtime Database miễn phí (1 phút):"), /*#__PURE__*/React.createElement("p", null, "1. Truy cập ", /*#__PURE__*/React.createElement("a", {
+    href: "https://console.firebase.google.com/",
+    target: "_blank",
+    rel: "noreferrer",
+    className: "text-emerald-700 underline font-semibold"
+  }, "console.firebase.google.com"), " và tạo một project mới."), /*#__PURE__*/React.createElement("p", null, "2. Chọn ", /*#__PURE__*/React.createElement("span", {
+    className: "font-semibold text-gray-800"
+  }, "Build > Realtime Database"), " > Bấm ", /*#__PURE__*/React.createElement("span", {
+    className: "font-semibold text-gray-800"
+  }, "Tạo cơ sở dữ liệu"), " > Chọn chế độ ", /*#__PURE__*/React.createElement("span", {
+    className: "font-semibold text-emerald-700"
+  }, "Test mode"), " (đọc/ghi tự do)."), /*#__PURE__*/React.createElement("p", null, "3. Sao chép đường dẫn (dạng ", /*#__PURE__*/React.createElement("code", {
+    className: "text-[11px] bg-white px-1 py-0.5 rounded border text-emerald-800"
+  }, "https://...firebaseio.com"), ") dán vào ô trên và bấm ", /*#__PURE__*/React.createElement("span", {
+    className: "font-semibold text-gray-800"
+  }, "Lưu & Kết nối"), "."))), /*#__PURE__*/React.createElement("div", {
+    className: "px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => setShowSyncModal(false),
+    className: "px-5 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold rounded-xl text-xs transition-colors"
+  }, "Đóng"))))}))))));
 }
 function App() {
   return /*#__PURE__*/React.createElement(ErrorBoundary, null, /*#__PURE__*/React.createElement(ProjectDashboard, null));

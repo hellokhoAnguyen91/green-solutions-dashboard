@@ -1,0 +1,228 @@
+{
+  "version": "2.0",
+  "updatedAt": 1791102259330,
+  "updatedBy": "Admin (Dữ liệu mới nhất)",
+  "data": {
+    "role": "admin",
+    "activeTab": "sponsors",
+    "isSidebarCollapsed": false,
+    "viewBy": "phase",
+    "phases": [
+      {
+        "id": 1,
+        "phase": "1. Khởi động",
+        "date": "15/9 - 30/9",
+        "desc": "Truyền thông & Khai mạc",
+        "status": "active"
+      },
+      {
+        "id": 2,
+        "phase": "2. Sơ khảo",
+        "date": "01/10 - 23/10",
+        "desc": "Nhận bài & Chấm thi",
+        "status": "pending"
+      },
+      {
+        "id": 3,
+        "phase": "3. Trải nghiệm",
+        "date": "24/10 - 15/11",
+        "desc": "Workshop & Thực tế",
+        "status": "pending"
+      },
+      {
+        "id": 4,
+        "phase": "4. Chung kết",
+        "date": "16/11 - 10/12",
+        "desc": "Thi trực tiếp & Báo cáo",
+        "status": "pending"
+      },
+      {
+        "id": 5,
+        "phase": "5. Tổng kết",
+        "date": "Trước 15/12",
+        "desc": "Báo cáo & Quyết toán",
+        "status": "pending"
+      }
+    ],
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Truyền thông, phát động cuộc thi",
+        "phase": "1. Khởi động (15/9 - 30/9)",
+        "category": "Truyền thông",
+        "date": "15/09/2026 - 30/09/2026",
+        "assignees": [
+          "BTC",
+          "P.QTTT"
+        ],
+        "status": "in-progress",
+        "evidence": [],
+        "subtasks": [
+          {
+            "id": 11,
+            "title": "Viết bài PR trên Fanpage",
+            "assignee": "Thành viên Truyền thông",
+            "isCompleted": true
+          },
+          {
+            "id": 12,
+            "title": "Gửi email hàng loạt cho sinh viên",
+            "assignee": "P.QTTT",
+            "isCompleted": false
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Tổ chức Lễ khai mạc",
+        "phase": "1. Khởi động (15/9 - 30/9)",
+        "category": "Sự kiện",
+        "date": "15/09/2026 - 30/09/2026",
+        "assignees": [
+          "BTC",
+          "INSEE"
+        ],
+        "status": "pending",
+        "evidence": [],
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Nhận đăng ký dự thi (Vòng Sơ khảo)",
+        "phase": "2. Sơ khảo (01/10 - 23/10)",
+        "category": "Sự kiện",
+        "date": "01/10/2026 - 15/10/2026",
+        "assignees": [
+          "BTC"
+        ],
+        "status": "pending",
+        "evidence": [],
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Chấm Vòng 1 – Sơ khảo",
+        "phase": "2. Sơ khảo (01/10 - 23/10)",
+        "category": "Chuyên môn",
+        "date": "16/10/2026 - 23/10/2026",
+        "assignees": [
+          "BGK",
+          "BTC"
+        ],
+        "status": "pending",
+        "evidence": [],
+        "subtasks": []
+      }
+    ],
+    "sponsors": [
+      {
+        "id": 1,
+        "name": "INSEE Việt Nam",
+        "role": "Nhà tài trợ chính",
+        "representative": "Bà Đinh Thị Yến",
+        "phone": "0901234567",
+        "email": "yen.dinh@insee.com",
+        "supportTypes": {
+          "cash": true,
+          "inKind": true
+        },
+        "inKindDetails": "Chuyên gia BGK, Hỗ trợ tham quan nhà máy",
+        "pledgedAmount": 35000000
+      },
+      {
+        "id": 2,
+        "name": "Phòng KHCN (ĐH CN KT TP.HCM)",
+        "role": "Đơn vị hỗ trợ",
+        "representative": "PGS.TS Vũ Văn Phong",
+        "phone": "0283899999",
+        "email": "khcn@ute.edu.vn",
+        "supportTypes": {
+          "cash": true,
+          "inKind": false
+        },
+        "inKindDetails": "",
+        "pledgedAmount": 10000000
+      }
+    ],
+    "transactions": [
+      {
+        "id": 1,
+        "date": "2026-09-10",
+        "type": "THU",
+        "amount": 10000000,
+        "source": "Phòng KHCN (ĐH CN KT TP.HCM)",
+        "note": "Chuyển khoản hỗ trợ Đợt 1"
+      },
+      {
+        "id": 2,
+        "date": "2026-09-12",
+        "type": "THU",
+        "amount": 5000000,
+        "source": "Quỹ Hoạt động Khoa",
+        "note": "Tạm ứng tiền mặt"
+      },
+      {
+        "id": 3,
+        "date": "2026-09-14",
+        "type": "CHI",
+        "amount": 1700000,
+        "source": "In ấn tài liệu, standee",
+        "note": "Thanh toán nhà in ABC (HĐ 123)"
+      },
+      {
+        "id": 4,
+        "date": "2026-09-20",
+        "type": "THU",
+        "amount": 15000000,
+        "source": "INSEE Việt Nam",
+        "note": "Chuyển khoản tài trợ Đợt 1"
+      }
+    ],
+    "budgetItems": [
+      {
+        "id": 1,
+        "name": "Giải Nhất (Quán quân)",
+        "unit": "Giải",
+        "price": 6000000,
+        "qty": 1,
+        "total": 6000000,
+        "type": "Ký nhận",
+        "category": "1. GIẢI THƯỞNG",
+        "evidence": []
+      },
+      {
+        "id": 2,
+        "name": "Giải Nhì",
+        "unit": "Giải",
+        "price": 4000000,
+        "qty": 1,
+        "total": 4000000,
+        "type": "Ký nhận",
+        "category": "1. GIẢI THƯỞNG",
+        "evidence": []
+      },
+      {
+        "id": 3,
+        "name": "Thù lao BGK Sơ khảo",
+        "unit": "Người",
+        "price": 2000000,
+        "qty": 3,
+        "total": 6000000,
+        "type": "Ký nhận",
+        "category": "2. CHUYÊN MÔN",
+        "evidence": []
+      },
+      {
+        "id": 4,
+        "name": "In ấn (chứng nhận, thẻ đeo...)",
+        "unit": "Bộ",
+        "price": 500000,
+        "qty": 1,
+        "total": 500000,
+        "type": "Hóa đơn",
+        "category": "3. TỔ CHỨC & HẬU CẦN",
+        "evidence": []
+      }
+    ]
+  }
+}
