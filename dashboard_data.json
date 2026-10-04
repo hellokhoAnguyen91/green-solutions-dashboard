@@ -1,7 +1,7 @@
 {
   "version": "2.0",
-  "updatedAt": 1791103488168,
-  "updatedBy": "Test Runner",
+  "updatedAt": 1791105583275,
+  "updatedBy": "Admin Cập nhật Giao diện & Dự toán",
   "data": {
     "role": "admin",
     "activeTab": "sponsors",
@@ -151,7 +151,15 @@
         "type": "THU",
         "amount": 10000000,
         "source": "Phòng KHCN (ĐH CN KT TP.HCM)",
-        "note": "Chuyển khoản hỗ trợ Đợt 1"
+        "note": "Chuyển khoản hỗ trợ Đợt 1",
+        "evidence": [
+          {
+            "id": 101,
+            "name": "Quyet_dinh_ho_tro_kinh_phi_KHCN.pdf",
+            "size": "310.2 KB",
+            "date": "10/09/2026"
+          }
+        ]
       },
       {
         "id": 2,
@@ -159,7 +167,8 @@
         "type": "THU",
         "amount": 5000000,
         "source": "Quỹ Hoạt động Khoa",
-        "note": "Tạm ứng tiền mặt"
+        "note": "Tạm ứng tiền mặt",
+        "evidence": []
       },
       {
         "id": 3,
@@ -167,7 +176,21 @@
         "type": "CHI",
         "amount": 1700000,
         "source": "In ấn tài liệu, standee",
-        "note": "Thanh toán nhà in ABC (HĐ 123)"
+        "note": "Thanh toán nhà in ABC (HĐ 123)",
+        "evidence": [
+          {
+            "id": 301,
+            "name": "Hoa_don_GTGT_Nha_in_ABC_1700k.pdf",
+            "size": "248.5 KB",
+            "date": "14/09/2026"
+          },
+          {
+            "id": 302,
+            "name": "Bien_ban_ban_giao_standee.jpg",
+            "size": "1.2 MB",
+            "date": "14/09/2026"
+          }
+        ]
       },
       {
         "id": 4,
@@ -175,7 +198,15 @@
         "type": "THU",
         "amount": 15000000,
         "source": "INSEE Việt Nam",
-        "note": "Chuyển khoản tài trợ Đợt 1"
+        "note": "Chuyển khoản tài trợ Đợt 1",
+        "evidence": [
+          {
+            "id": 401,
+            "name": "Giay_bao_Co_INSEE_Dot1_15M.pdf",
+            "size": "180.4 KB",
+            "date": "20/09/2026"
+          }
+        ]
       }
     ],
     "budgetItems": [
@@ -186,9 +217,9 @@
         "price": 6000000,
         "qty": 1,
         "total": 6000000,
+        "spent": 0,
         "type": "Ký nhận",
-        "category": "1. GIẢI THƯỞNG",
-        "evidence": []
+        "category": "1. GIẢI THƯỞNG"
       },
       {
         "id": 2,
@@ -197,9 +228,9 @@
         "price": 4000000,
         "qty": 1,
         "total": 4000000,
+        "spent": 0,
         "type": "Ký nhận",
-        "category": "1. GIẢI THƯỞNG",
-        "evidence": []
+        "category": "1. GIẢI THƯỞNG"
       },
       {
         "id": 3,
@@ -208,9 +239,9 @@
         "price": 2000000,
         "qty": 3,
         "total": 6000000,
+        "spent": 6000000,
         "type": "Ký nhận",
-        "category": "2. CHUYÊN MÔN",
-        "evidence": []
+        "category": "2. CHUYÊN MÔN"
       },
       {
         "id": 4,
@@ -219,9 +250,9 @@
         "price": 500000,
         "qty": 1,
         "total": 500000,
+        "spent": 1700000,
         "type": "Hóa đơn",
-        "category": "3. TỔ CHỨC & HẬU CẦN",
-        "evidence": []
+        "category": "3. TỔ CHỨC & HẬU CẦN"
       }
     ]
   }
