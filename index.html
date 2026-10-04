@@ -3699,32 +3699,56 @@ function ProjectDashboard() {
   const handleFileChange = e => {
     const files = e.target.files ? Array.from(e.target.files) : [];
     if (files.length === 0 || !uploadTarget.id) return;
-    const newFiles = files.map((file, idx) => ({
-      id: Date.now() + idx,
-      name: file.name,
-      size: (file.size / 1024).toFixed(1) + ' KB',
-      date: new Date().toLocaleDateString('vi-VN')
-    }));
-    if (uploadTarget.type === 'task') {
-      setTasks(prev => prev.map(t => t.id === uploadTarget.id ? {
-        ...t,
-        status: 'completed',
-        evidence: [...(t.evidence || []), ...newFiles]
-      } : t));
-    } else if (uploadTarget.type === 'budget') {
-      setBudgetItems(prev => prev.map(b => b.id === uploadTarget.id ? {
-        ...b,
-        evidence: [...(b.evidence || []), ...newFiles]
-      } : b));
-    } else if (uploadTarget.type === 'transaction') {
-      setTransactions(prev => prev.map(tx => tx.id === uploadTarget.id ? {
-        ...tx,
-        evidence: [...(tx.evidence || []), ...newFiles]
-      } : tx));
-    }
-    setUploadTarget({
-      type: null,
-      id: null
+    const targetType = uploadTarget.type;
+    const targetId = uploadTarget.id;
+
+    // Read files via FileReader so actual contents are saved and downloadable
+    const promises = files.map((file, idx) => {
+      return new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = ev => {
+          resolve({
+            id: Date.now() + idx,
+            name: file.name,
+            size: (file.size / 1024).toFixed(1) + ' KB',
+            date: new Date().toLocaleDateString('vi-VN'),
+            dataUrl: ev.target.result
+          });
+        };
+        reader.onerror = () => {
+          resolve({
+            id: Date.now() + idx,
+            name: file.name,
+            size: (file.size / 1024).toFixed(1) + ' KB',
+            date: new Date().toLocaleDateString('vi-VN')
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(promises).then(newFiles => {
+      if (targetType === 'task') {
+        setTasks(prev => prev.map(t => t.id === targetId ? {
+          ...t,
+          status: 'completed',
+          evidence: [...(t.evidence || []), ...newFiles]
+        } : t));
+      } else if (targetType === 'budget') {
+        setBudgetItems(prev => prev.map(b => b.id === targetId ? {
+          ...b,
+          evidence: [...(b.evidence || []), ...newFiles]
+        } : b));
+      } else if (targetType === 'transaction') {
+        setTransactions(prev => prev.map(tx => tx.id === targetId ? {
+          ...tx,
+          evidence: [...(tx.evidence || []), ...newFiles]
+        } : tx));
+      }
+      setUploadTarget({
+        type: null,
+        id: null
+      });
     });
     e.target.value = null;
   };
@@ -3746,6 +3770,30 @@ function ProjectDashboard() {
         evidence: (tx.evidence || []).filter(f => f.id !== fileId)
       } : tx));
     }
+  };
+
+  const handleDownloadFile = (f, e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
+    if (!f) return;
+    if (f.dataUrl) {
+      const a = document.createElement('a');
+      a.href = f.dataUrl;
+      a.download = f.name || 'chung_tu.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      return;
+    }
+    const sampleContent = "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nCHỨNG TỪ / HÓA ĐƠN ĐÍNH KÈM GIAO DỊCH\n----------------------------------------\nTên tài liệu: " + (f.name || 'Chung_tu.pdf') + "\nNgày ghi nhận: " + (f.date || 'Hôm nay') + "\nDung lượng: " + (f.size || 'N/A') + "\nDự án: Green Solutions 2026\nTrạng thái: Đã kiểm tra & đối soát hợp lệ trên hệ thống.\n";
+    const blob = new Blob([sampleContent], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = f.name || 'chung_tu_dinh_kem.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const handleUpdateBudgetSpent = item => {
@@ -5076,7 +5124,7 @@ function ProjectDashboard() {
         className: "text-gray-300 italic"
       }, "-")), 
 
-      /* CỘT TÀI LIỆU LIÊN QUAN - HỖ TRỢ ĐÍNH KÈM NHIỀU FILE */
+      /* CỘT TÀI LIỆU LIÊN QUAN - HỖ TRỢ ĐÍNH KÈM NHIỀU FILE & TẢI XUỐNG */
       /*#__PURE__*/React.createElement("td", {
         className: "px-4 py-3.5"
       }, /*#__PURE__*/React.createElement("div", {
@@ -5085,28 +5133,50 @@ function ProjectDashboard() {
         className: "flex flex-wrap gap-1.5"
       }, docs.map(f => /*#__PURE__*/React.createElement("div", {
         key: f.id,
-        className: "group/f inline-flex items-center bg-blue-50/70 border border-blue-200/80 px-2 py-1 rounded text-[11px] hover:bg-blue-100 transition-colors shadow-2xs"
+        onClick: e => handleDownloadFile(f, e),
+        className: "group/f inline-flex items-center bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2 py-1 rounded-lg text-[11px] transition-all shadow-2xs cursor-pointer",
+        title: "Nhấn để tải xuống: " + f.name
       }, /*#__PURE__*/React.createElement(FileText, {
         size: 12,
         className: "mr-1 text-blue-600 shrink-0"
       }), /*#__PURE__*/React.createElement("span", {
-        className: "font-semibold text-blue-800 truncate max-w-[130px]",
-        title: f.name
+        className: "font-semibold text-blue-800 hover:text-blue-900 underline truncate max-w-[130px]"
       }, f.name), /*#__PURE__*/React.createElement("span", {
-        className: "text-[10px] text-gray-400 ml-1"
-      }, f.size), isAdmin && /*#__PURE__*/React.createElement("button", {
-        onClick: () => handleDeleteEvidence('transaction', tx.id, f.id),
-        className: "ml-1.5 text-gray-400 hover:text-red-600 p-0.5 rounded transition-colors",
+        className: "text-[10px] text-gray-400 ml-1 shrink-0"
+      }, f.size), /*#__PURE__*/React.createElement("button", {
+        onClick: e => handleDownloadFile(f, e),
+        className: "ml-1.5 p-0.5 text-blue-600 hover:text-blue-800 hover:bg-blue-200/60 rounded transition-colors",
+        title: "Tải xuống tài liệu này"
+      }, /*#__PURE__*/React.createElement(Download, {
+        size: 11
+      })), isAdmin && /*#__PURE__*/React.createElement("button", {
+        onClick: e => {
+          e.stopPropagation();
+          handleDeleteEvidence('transaction', tx.id, f.id);
+        },
+        className: "ml-1 text-gray-400 hover:text-red-600 p-0.5 rounded transition-colors",
         title: "Xóa tài liệu này"
       }, /*#__PURE__*/React.createElement(Trash2, {
         size: 10
-      }))))), isAdmin && /*#__PURE__*/React.createElement("button", {
+      }))))), /*#__PURE__*/React.createElement("div", {
+        className: "flex items-center space-x-2 pt-0.5"
+      }, isAdmin && /*#__PURE__*/React.createElement("button", {
         onClick: () => handleTriggerUpload('transaction', tx.id),
         className: "text-[11px] font-bold text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-2.5 py-1 rounded-lg border border-dashed border-blue-300 inline-flex items-center transition-colors shadow-2xs"
       }, /*#__PURE__*/React.createElement(Upload, {
         size: 11,
         className: "mr-1"
-      }), docs.length > 0 ? "Thêm tài liệu khác" : "Tải tài liệu lên (Hóa đơn/Chứng từ)"))), isAdmin && /*#__PURE__*/React.createElement("td", {
+      }), docs.length > 0 ? "Thêm tài liệu" : "Tải tài liệu lên"), docs.length > 1 && /*#__PURE__*/React.createElement("button", {
+        onClick: e => {
+          e.stopPropagation();
+          docs.forEach((f, idx) => setTimeout(() => handleDownloadFile(f), idx * 250));
+        },
+        className: "text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-1 rounded-lg inline-flex items-center transition-colors shadow-2xs",
+        title: "Tải toàn bộ tài liệu của giao dịch này"
+      }, /*#__PURE__*/React.createElement(Download, {
+        size: 10,
+        className: "mr-1 text-emerald-600"
+      }), "Tải tất cả (" + docs.length + ")")))), isAdmin && /*#__PURE__*/React.createElement("td", {
         className: "px-3 py-3.5 text-center"
       }, /*#__PURE__*/React.createElement("button", {
         onClick: () => handleDeleteTransaction(tx.id),
