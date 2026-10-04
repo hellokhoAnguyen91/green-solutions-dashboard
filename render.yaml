@@ -1,6 +1,12 @@
 services:
   - type: web
     name: green-solutions-dashboard
-    env: static
+    env: node
+    plan: free
     buildCommand: ""
-    staticPublishPath: ./
+    startCommand: node server.js
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production

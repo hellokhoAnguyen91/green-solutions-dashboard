@@ -3265,7 +3265,7 @@ function ProjectDashboard() {
   const isRemoteSyncingRef = useRef(false);
   const localUpdatedAtRef = useRef(saved && saved.updatedAt ? saved.updatedAt : Date.now());
 
-  // URL Query Param & Local LAN Detection
+  // URL Query Param, Render Cloud & LAN Detection
   useEffect(() => {
     try {
       const params = new URLSearchParams(window.location.search);
@@ -3275,9 +3275,16 @@ function ProjectDashboard() {
         setCloudConfig(newCfg);
         setTempEndpoint(syncParam.trim());
         saveStoredCloudConfig(newCfg);
-      } else if (!cloudConfig.endpoint) {
-        if (window.location.port === '8080' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.startsWith('192.168.')) {
-          const autoEndpoint = window.location.origin + '/api/data';
+      } else if (!cloudConfig.endpoint || (cloudConfig.endpoint.includes('localhost') && window.location.hostname.endsWith('onrender.com'))) {
+        let autoEndpoint = '';
+        if (window.location.hostname.endsWith('onrender.com')) {
+          autoEndpoint = window.location.origin + '/api/data';
+        } else if (window.location.port === '8080' || window.location.port === '10000' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.startsWith('192.168.')) {
+          autoEndpoint = window.location.origin + '/api/data';
+        } else if (window.location.hostname.includes('github.io')) {
+          autoEndpoint = 'https://green-solutions-dashboard.onrender.com/api/data';
+        }
+        if (autoEndpoint) {
           const newCfg = { ...cloudConfig, endpoint: autoEndpoint, autoSync: true };
           setCloudConfig(newCfg);
           setTempEndpoint(autoEndpoint);
@@ -3305,7 +3312,7 @@ function ProjectDashboard() {
     if (!ep) return;
     try {
       setSyncStatus('syncing');
-      setSyncMessage('Đang lưu lên Đám mây...');
+      setSyncMessage('Đang lưu...');
       const now = Date.now();
       localUpdatedAtRef.current = now;
       const payload = {
@@ -3401,7 +3408,7 @@ function ProjectDashboard() {
       if (!isRemoteSyncingRef.current && syncStatus !== 'syncing') {
         pullDataFromRemote(false);
       }
-    }, 8000);
+    }, 6000);
     return () => clearInterval(interval);
   }, [cloudConfig.endpoint, cloudConfig.autoSync]);
 
@@ -5433,7 +5440,7 @@ function ProjectDashboard() {
     className: "text-2xl font-extrabold text-gray-900 tracking-tight"
   }, activeTab === 'overview' ? 'Tổng quan Dự án' : activeTab === 'tasks' ? 'Quản lý Tiến độ & Sự kiện' : activeTab === 'sponsors' ? 'Quản lý Tài chính & Dòng tiền' : 'Dự toán chi phí chi tiết'), /*#__PURE__*/React.createElement("p", {
     className: "text-sm text-gray-500 font-medium mt-0.5"
-  }, cloudConfig.endpoint ? (syncStatus === 'syncing' ? "Đang đồng bộ Đám mây..." : "Đồng bộ Đám mây thời gian thực đang bật.") : "Chế độ lưu cục bộ. Nhấn 'Đồng bộ Đám mây' để kết nối các máy khác.")), /*#__PURE__*/React.createElement("div", {
+  }, cloudConfig.endpoint ? (syncStatus === 'syncing' ? "Đang đồng bộ Render Cloud..." : "Đồng bộ Đám mây thời gian thực đang bật.") : "Chế độ lưu cục bộ. Nhấn 'Đồng bộ Đám mây' để kết nối các máy khác.")), /*#__PURE__*/React.createElement("div", {
     className: "flex items-center space-x-3"
   }, /*#__PURE__*/React.createElement("button", {
     onClick: () => setShowSyncModal(true),
@@ -6186,13 +6193,13 @@ function ProjectDashboard() {
     className: `px-2.5 py-1 rounded-full text-[11px] font-bold ${syncStatus === 'syncing' ? 'bg-blue-100 text-blue-800 animate-pulse' : 'bg-emerald-200 text-emerald-900'}`
   }, syncStatus === 'syncing' ? 'Đang lưu...' : 'Realtime')), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
     className: "block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
-  }, "Đường dẫn Cloud Database (Firebase / REST API)"), /*#__PURE__*/React.createElement("div", {
+  }, "Đường dẫn Cloud Database (Render API / Firebase / REST)"), /*#__PURE__*/React.createElement("div", {
     className: "flex space-x-2"
   }, /*#__PURE__*/React.createElement("input", {
     type: "text",
     value: tempEndpoint,
     onChange: e => setTempEndpoint(e.target.value),
-    placeholder: "https://your-app-default-rtdb.firebaseio.com/data.json",
+    placeholder: "https://green-solutions-dashboard.onrender.com/api/data",
     className: "flex-1 p-2.5 border border-gray-300 rounded-xl text-xs font-mono outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
   }), /*#__PURE__*/React.createElement("button", {
     onClick: () => {
@@ -6254,22 +6261,13 @@ function ProjectDashboard() {
     className: "p-3.5 bg-gray-50 rounded-xl border border-gray-200 text-xs text-gray-600 space-y-1.5"
   }, /*#__PURE__*/React.createElement("p", {
     className: "font-bold text-gray-800 flex items-center"
-  }, "⚡ Hướng dẫn tạo Firebase Realtime Database miễn phí (1 phút):"), /*#__PURE__*/React.createElement("p", null, "1. Truy cập ", /*#__PURE__*/React.createElement("a", {
-    href: "https://console.firebase.google.com/",
-    target: "_blank",
-    rel: "noreferrer",
-    className: "text-emerald-700 underline font-semibold"
-  }, "console.firebase.google.com"), " và tạo một project mới."), /*#__PURE__*/React.createElement("p", null, "2. Chọn ", /*#__PURE__*/React.createElement("span", {
-    className: "font-semibold text-gray-800"
-  }, "Build > Realtime Database"), " > Bấm ", /*#__PURE__*/React.createElement("span", {
-    className: "font-semibold text-gray-800"
-  }, "Tạo cơ sở dữ liệu"), " > Chọn chế độ ", /*#__PURE__*/React.createElement("span", {
+  }, "☁️ Tùy chọn máy chủ đồng bộ:"), /*#__PURE__*/React.createElement("p", null, "• ", /*#__PURE__*/React.createElement("span", {
     className: "font-semibold text-emerald-700"
-  }, "Test mode"), " (đọc/ghi tự do)."), /*#__PURE__*/React.createElement("p", null, "3. Sao chép đường dẫn (dạng ", /*#__PURE__*/React.createElement("code", {
+  }, "Render Cloud API"), ": ", /*#__PURE__*/React.createElement("code", {
     className: "text-[11px] bg-white px-1 py-0.5 rounded border text-emerald-800"
-  }, "https://...firebaseio.com"), ") dán vào ô trên và bấm ", /*#__PURE__*/React.createElement("span", {
+  }, "https://green-solutions-dashboard.onrender.com/api/data"), " (Tự động kết nối)"), /*#__PURE__*/React.createElement("p", null, "• ", /*#__PURE__*/React.createElement("span", {
     className: "font-semibold text-gray-800"
-  }, "Lưu & Kết nối"), "."))), /*#__PURE__*/React.createElement("div", {
+  }, "Google Firebase"), ": Dán link Realtime Database nếu muốn dùng song song Firebase."))), /*#__PURE__*/React.createElement("div", {
     className: "px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end"
   }, /*#__PURE__*/React.createElement("button", {
     onClick: () => setShowSyncModal(false),
