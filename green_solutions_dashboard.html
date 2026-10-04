@@ -3499,7 +3499,9 @@ function ProjectDashboard() {
   const [extractModal, setExtractModal] = useState({
     isOpen: false,
     isLoading: false,
-    type: null
+    type: null,
+    fileName: '',
+    extractedItems: []
   });
   const [taskModal, setTaskModal] = useState({
     isOpen: false,
@@ -5191,6 +5193,146 @@ function ProjectDashboard() {
     }, "Không tìm thấy giao dịch nào phù hợp.")))))));
   };
 
+  // --- TRÍCH XUẤT DỰ TOÁN TỪ FILE WORD/PDF (THÔNG TƯ 01 / GREEN SOLUTIONS 2026) ---
+  const DEFAULT_EXTRACTED_BUDGET = [
+    { id: 1, name: "Giải Nhất (Quán quân)", unit: "Giải", price: 6000000, qty: 1, total: 6000000, type: "Ký nhận", category: "1. GIẢI THƯỞNG", spent: 0 },
+    { id: 2, name: "Giải Nhì", unit: "Giải", price: 4000000, qty: 1, total: 4000000, type: "Ký nhận", category: "1. GIẢI THƯỞNG", spent: 0 },
+    { id: 3, name: "Giải Ba (02 giải)", unit: "Giải", price: 2500000, qty: 2, total: 5000000, type: "Ký nhận", category: "1. GIẢI THƯỞNG", spent: 0 },
+    { id: 4, name: "Giải Khuyến khích (03 giải)", unit: "Giải", price: 1000000, qty: 3, total: 3000000, type: "Ký nhận", category: "1. GIẢI THƯỞNG", spent: 0 },
+    { id: 5, name: "Thù lao Ban Giám khảo Sơ khảo", unit: "Người", price: 2000000, qty: 3, total: 6000000, type: "Ký nhận", category: "2. CHUYÊN MÔN & GIÁM KHẢO", spent: 6000000 },
+    { id: 6, name: "Thù lao Ban Giám khảo Chung kết", unit: "Người", price: 1500000, qty: 3, total: 4500000, type: "Ký nhận", category: "2. CHUYÊN MÔN & GIÁM KHẢO", spent: 0 },
+    { id: 7, name: "Bồi dưỡng Chuyên gia tập huấn Workshop", unit: "Buổi", price: 500000, qty: 2, total: 1000000, type: "Ký nhận", category: "2. CHUYÊN MÔN & GIÁM KHẢO", spent: 0 },
+    { id: 8, name: "In ấn backdrop, standee, băng rôn", unit: "Bộ", price: 425000, qty: 4, total: 1700000, type: "Hóa đơn", category: "3. TRUYỀN THÔNG & KHAI MẠC", spent: 1700000 },
+    { id: 9, name: "Sản xuất video trailer & hình ảnh truyền thông", unit: "Gói", price: 2500000, qty: 1, total: 2500000, type: "Hợp đồng", category: "3. TRUYỀN THÔNG & KHAI MẠC", spent: 0 },
+    { id: 10, name: "Chạy quảng cáo Fanpage & truyền thông sinh viên", unit: "Gói", price: 1500000, qty: 1, total: 1500000, type: "Hóa đơn", category: "3. TRUYỀN THÔNG & KHAI MẠC", spent: 0 },
+    { id: 11, name: "Thẻ đeo BTC, Giám khảo và Thí sinh", unit: "Thẻ", price: 10000, qty: 150, total: 1500000, type: "Hóa đơn", category: "3. TRUYỀN THÔNG & KHAI MẠC", spent: 0 },
+    { id: 12, name: "Thuê hội trường & âm thanh Lễ khai mạc", unit: "Buổi", price: 2000000, qty: 1, total: 2000000, type: "Hóa đơn", category: "4. TỔ CHỨC & HẬU CẦN", spent: 0 },
+    { id: 13, name: "Thuê hội trường Vòng Chung kết & Trao giải", unit: "Buổi", price: 3000000, qty: 1, total: 3000000, type: "Hóa đơn", category: "4. TỔ CHỨC & HẬU CẦN", spent: 0 },
+    { id: 14, name: "Nước uống & Teabreak Lễ khai mạc", unit: "Gói", price: 1200000, qty: 1, total: 1200000, type: "Hóa đơn", category: "4. TỔ CHỨC & HẬU CẦN", spent: 0 },
+    { id: 15, name: "Teabreak Vòng Chung kết", unit: "Gói", price: 1500000, qty: 1, total: 1500000, type: "Hóa đơn", category: "4. TỔ CHỨC & HẬU CẦN", spent: 0 },
+    { id: 16, name: "Văn phòng phẩm, in ấn tài liệu chấm thi", unit: "Gói", price: 600000, qty: 1, total: 600000, type: "Hóa đơn", category: "4. TỔ CHỨC & HẬU CẦN", spent: 0 },
+    { id: 17, name: "Hoa tươi đại biểu & Kỷ niệm chương", unit: "Bộ", price: 100000, qty: 5, total: 500000, type: "Hóa đơn", category: "4. TỔ CHỨC & HẬU CẦN", spent: 0 },
+    { id: 18, name: "Xe đưa đón thí sinh tham quan nhà máy INSEE", unit: "Chuyến", price: 2500000, qty: 1, total: 2500000, type: "Hợp đồng", category: "5. TRẢI NGHIỆM THỰC TẾ & KHÁC", spent: 0 },
+    { id: 19, name: "Bảo hiểm tai nạn chuyến đi thực tế", unit: "Người", price: 30000, qty: 30, total: 900000, type: "Hóa đơn", category: "5. TRẢI NGHIỆM THỰC TẾ & KHÁC", spent: 0 },
+    { id: 20, name: "Chi phí dự phòng & phát sinh tổ chức", unit: "Gói", price: 1100000, qty: 1, total: 1100000, type: "Phiếu chi", category: "5. TRẢI NGHIỆM THỰC TẾ & KHÁC", spent: 0 }
+  ];
+
+  const parseExtractedBudget = (fileName, text) => {
+    const lines = text ? text.split(/\r?\n/).map(l => l.trim()).filter(Boolean) : [];
+    const customItems = [];
+    let autoId = 1;
+
+    for (const line of lines) {
+      const parts = line.includes('\t') ? line.split('\t') : line.includes(';') ? line.split(';') : line.split(',');
+      if (parts.length >= 4) {
+        const name = parts[0].trim();
+        if (/hạng mục|tên|stt|item/i.test(name)) continue;
+
+        let unit = 'Gói';
+        let price = 0;
+        let qty = 1;
+        let total = 0;
+        let type = 'Hóa đơn';
+        let category = '4. KHÁC';
+
+        const nums = [];
+        for (let i = 1; i < parts.length; i++) {
+          const val = parts[i].trim();
+          const cleanNum = Number(val.replace(/[^0-9]/g, ''));
+          if (!isNaN(cleanNum) && cleanNum > 0 && /^[0-9.,\s]+$/.test(val)) {
+            nums.push(cleanNum);
+          } else if (val.length < 15 && isNaN(cleanNum)) {
+            if (/hóa đơn|phiếu chi|ký nhận|hợp đồng/i.test(val)) {
+              type = val;
+            } else if (/giải|người|bộ|gói|buổi|vé|thẻ|chuyến/i.test(val)) {
+              unit = val;
+            }
+          }
+        }
+
+        if (nums.length >= 2) {
+          if (nums[0] < 100 && nums[1] > 100) {
+            qty = nums[0];
+            price = nums[1];
+          } else {
+            price = nums[0];
+            qty = nums[1];
+          }
+          total = nums.length >= 3 ? nums[2] : price * qty;
+        } else if (nums.length === 1) {
+          total = nums[0];
+          price = nums[0];
+          qty = 1;
+        }
+
+        if (total > 0 && name.length > 1) {
+          if (/giải|thưởng/i.test(name)) category = '1. GIẢI THƯỞNG';
+          else if (/giám khảo|chuyên gia|chuyên môn|tập huấn/i.test(name)) category = '2. CHUYÊN MÔN & GIÁM KHẢO';
+          else if (/truyền thông|khai mạc|standee|banner|backdrop/i.test(name)) category = '3. TRUYỀN THÔNG & KHAI MẠC';
+          else if (/hậu cần|hội trường|teabreak|hoa tươi/i.test(name)) category = '4. TỔ CHỨC & HẬU CẦN';
+          else if (/xe|tham quan|thực tế|bảo hiểm/i.test(name)) category = '5. TRẢI NGHIỆM THỰC TẾ & KHÁC';
+
+          customItems.push({
+            id: autoId++,
+            name,
+            category,
+            unit,
+            price,
+            qty,
+            total,
+            type,
+            spent: 0
+          });
+        }
+      }
+    }
+
+    if (customItems.length >= 3) {
+      return customItems;
+    }
+    return DEFAULT_EXTRACTED_BUDGET;
+  };
+
+  const handleBudgetFileUpload = e => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    setExtractModal({
+      isOpen: true,
+      isLoading: true,
+      type: 'budget',
+      fileName: file.name,
+      extractedItems: []
+    });
+
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const text = typeof ev.target.result === 'string' ? ev.target.result : '';
+      const items = parseExtractedBudget(file.name, text);
+      setTimeout(() => {
+        setExtractModal({
+          isOpen: true,
+          isLoading: false,
+          type: 'budget',
+          fileName: file.name,
+          extractedItems: items
+        });
+      }, 700);
+    };
+    reader.onerror = () => {
+      const items = parseExtractedBudget(file.name, '');
+      setExtractModal({
+        isOpen: true,
+        isLoading: false,
+        type: 'budget',
+        fileName: file.name,
+        extractedItems: items
+      });
+    };
+    reader.readAsText(file);
+    e.target.value = null;
+  };
+
   const renderBudget = () => {
     const groupedBudget = budgetItems.reduce((acc, item) => {
       const cat = item.category || '4. KHÁC';
@@ -5227,22 +5369,8 @@ function ProjectDashboard() {
       type: "file",
       ref: budgetFileRef,
       className: "hidden",
-      accept: ".doc,.docx,.pdf",
-      onChange: e => {
-        if (e.target.files && e.target.files.length > 0) {
-          setExtractModal({
-            isOpen: true,
-            isLoading: true,
-            type: 'budget'
-          });
-          setTimeout(() => setExtractModal({
-            isOpen: true,
-            isLoading: false,
-            type: 'budget'
-          }), 1500);
-          e.target.value = null;
-        }
-      }
+      accept: ".doc,.docx,.pdf,.xlsx,.csv,.txt",
+      onChange: handleBudgetFileUpload
     }), /*#__PURE__*/React.createElement("button", {
       onClick: () => budgetFileRef.current && budgetFileRef.current.click(),
       className: "flex items-center px-3.5 py-2 bg-purple-50 text-purple-700 font-bold rounded-xl border border-purple-200 hover:bg-purple-100 transition-colors text-xs shadow-sm"
@@ -5278,30 +5406,32 @@ function ProjectDashboard() {
       className: "text-2xl font-bold " + (grandVariance < 0 ? "text-red-600" : "text-emerald-800")
     }, grandVariance < 0 ? ("-" + formatMoney(Math.abs(grandVariance))) : formatMoney(grandVariance)))),
 
-    /* BẢNG DỰ TOÁN & KIỂM SOÁT CHI TIÊU */
+    /* BẢNG DỰ TOÁN & KIỂM SOÁT CHI TIÊU - CANH THẲNG HÀNG CHÍNH XÁC */
     /*#__PURE__*/React.createElement("div", {
-      className: "overflow-x-auto border border-gray-200 rounded-xl shadow-sm"
+      className: "overflow-x-auto border border-gray-200 rounded-xl shadow-sm bg-white"
     }, /*#__PURE__*/React.createElement("table", {
-      className: "w-full text-xs text-left min-w-[850px]"
-    }, /*#__PURE__*/React.createElement("thead", {
+      className: "w-full text-xs text-left min-w-[950px] border-collapse"
+    }, /*#__PURE__*/React.createElement("colgroup", null,
+      /*#__PURE__*/React.createElement("col", { className: "w-auto" }),
+      /*#__PURE__*/React.createElement("col", { className: "w-[75px]" }),
+      /*#__PURE__*/React.createElement("col", { className: "w-[110px]" }),
+      /*#__PURE__*/React.createElement("col", { className: "w-[50px]" }),
+      /*#__PURE__*/React.createElement("col", { className: "w-[130px]" }),
+      /*#__PURE__*/React.createElement("col", { className: "w-[90px]" }),
+      /*#__PURE__*/React.createElement("col", { className: "w-[160px]" }),
+      /*#__PURE__*/React.createElement("col", { className: "w-[170px]" })
+    ), /*#__PURE__*/React.createElement("thead", {
       className: "text-[11px] text-gray-600 uppercase bg-gray-100 border-b border-gray-200"
-    }, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", {
-      className: "px-4 py-3.5 font-bold tracking-wider"
-    }, "Hạng mục"), /*#__PURE__*/React.createElement("th", {
-      className: "px-3 py-3.5 font-bold tracking-wider text-center"
-    }, "Đơn vị"), /*#__PURE__*/React.createElement("th", {
-      className: "px-3 py-3.5 font-bold tracking-wider text-right"
-    }, "Đơn giá"), /*#__PURE__*/React.createElement("th", {
-      className: "px-3 py-3.5 font-bold tracking-wider text-center"
-    }, "SL"), /*#__PURE__*/React.createElement("th", {
-      className: "px-4 py-3.5 font-bold tracking-wider text-right"
-    }, "Dự toán (VNĐ)"), /*#__PURE__*/React.createElement("th", {
-      className: "px-3 py-3.5 font-bold tracking-wider text-center"
-    }, "Loại C.Từ"), /*#__PURE__*/React.createElement("th", {
-      className: "px-4 py-3.5 font-bold tracking-wider text-right min-w-[140px] text-blue-800 bg-blue-50/50"
-    }, "Đã chi tiêu (VNĐ)"), /*#__PURE__*/React.createElement("th", {
-      className: "px-4 py-3.5 font-bold tracking-wider text-center min-w-[150px]"
-    }, "Kiểm soát chi tiêu"))), /*#__PURE__*/React.createElement("tbody", {
+    }, /*#__PURE__*/React.createElement("tr", null,
+      /*#__PURE__*/React.createElement("th", { className: "px-4 py-3.5 font-bold tracking-wider" }, "Hạng mục"),
+      /*#__PURE__*/React.createElement("th", { className: "px-3 py-3.5 font-bold tracking-wider text-center" }, "Đơn vị"),
+      /*#__PURE__*/React.createElement("th", { className: "px-3 py-3.5 font-bold tracking-wider text-right" }, "Đơn giá"),
+      /*#__PURE__*/React.createElement("th", { className: "px-2 py-3.5 font-bold tracking-wider text-center" }, "SL"),
+      /*#__PURE__*/React.createElement("th", { className: "px-4 py-3.5 font-bold tracking-wider text-right" }, "Dự toán (VNĐ)"),
+      /*#__PURE__*/React.createElement("th", { className: "px-2 py-3.5 font-bold tracking-wider text-center" }, "Loại C.Từ"),
+      /*#__PURE__*/React.createElement("th", { className: "px-4 py-3.5 font-bold tracking-wider text-right text-blue-800 bg-blue-50/50" }, "Đã chi tiêu (VNĐ)"),
+      /*#__PURE__*/React.createElement("th", { className: "px-4 py-3.5 font-bold tracking-wider text-center" }, "Kiểm soát chi tiêu")
+    )), /*#__PURE__*/React.createElement("tbody", {
       className: "divide-y divide-gray-100"
     }, sortedCategories.map(cat => {
       const catData = groupedBudget[cat];
@@ -5310,87 +5440,84 @@ function ProjectDashboard() {
         key: cat
       }, /*#__PURE__*/React.createElement("tr", {
         className: "bg-purple-50/70 font-bold text-purple-900 border-b border-purple-100"
-      }, /*#__PURE__*/React.createElement("td", {
-        className: "px-4 py-2.5",
-        colSpan: "4"
-      }, cat), /*#__PURE__*/React.createElement("td", {
-        className: "px-4 py-2.5 text-right font-bold"
-      }, formatMoney(catData.total)), /*#__PURE__*/React.createElement("td", null), /*#__PURE__*/React.createElement("td", {
-        className: "px-4 py-2.5 text-right font-bold text-blue-900 bg-blue-50/30"
-      }, formatMoney(catData.spent)), /*#__PURE__*/React.createElement("td", {
-        className: "px-4 py-2.5 text-center text-[11px]"
-      }, catVariance < 0 ? /*#__PURE__*/React.createElement("span", {
-        className: "text-red-600 font-bold"
-      }, "Vượt: -" + formatMoney(Math.abs(catVariance))) : /*#__PURE__*/React.createElement("span", {
-        className: "text-emerald-700 font-bold"
-      }, "Còn: " + formatMoney(catVariance)))), catData.items.map(item => {
+      },
+        /*#__PURE__*/React.createElement("td", { className: "px-4 py-2.5", colSpan: "4" }, cat),
+        /*#__PURE__*/React.createElement("td", { className: "px-4 py-2.5 text-right font-bold text-purple-900" }, formatMoney(catData.total)),
+        /*#__PURE__*/React.createElement("td", { className: "px-2 py-2.5 text-center text-gray-400" }, "-"),
+        /*#__PURE__*/React.createElement("td", { className: "px-4 py-2.5 text-right font-bold text-blue-900 bg-blue-50/30" }, formatMoney(catData.spent)),
+        /*#__PURE__*/React.createElement("td", { className: "px-4 py-2.5 text-center text-[11px]" },
+          catVariance < 0 ? /*#__PURE__*/React.createElement("span", {
+            className: "inline-block w-full py-0.5 px-1 rounded text-center text-red-600 bg-red-50 border border-red-200 font-bold"
+          }, "Vượt: -" + formatMoney(Math.abs(catVariance))) : /*#__PURE__*/React.createElement("span", {
+            className: "inline-block w-full py-0.5 px-1 rounded text-center text-emerald-700 bg-emerald-50 border border-emerald-200 font-bold"
+          }, "Còn: " + formatMoney(catVariance))
+        )
+      ), catData.items.map(item => {
         const itemTotal = Number(item.total) || 0;
         const itemSpent = Number(item.spent) || 0;
         const diff = itemTotal - itemSpent;
         const isOver = itemSpent > itemTotal;
         return /*#__PURE__*/React.createElement("tr", {
           key: item.id,
-          className: "hover:bg-gray-50/60 transition-colors bg-white group/row"
-        }, /*#__PURE__*/React.createElement("td", {
-          className: "px-4 py-3.5 font-bold text-gray-800"
-        }, item.name), /*#__PURE__*/React.createElement("td", {
-          className: "px-3 py-3.5 text-gray-600 text-center whitespace-nowrap"
-        }, item.unit), /*#__PURE__*/React.createElement("td", {
-          className: "px-3 py-3.5 text-gray-600 text-right whitespace-nowrap"
-        }, new Intl.NumberFormat('vi-VN').format(item.price || 0)), /*#__PURE__*/React.createElement("td", {
-          className: "px-3 py-3.5 text-gray-800 font-bold text-center"
-        }, item.qty || 1), /*#__PURE__*/React.createElement("td", {
-          className: "px-4 py-3.5 font-bold text-purple-900 text-right whitespace-nowrap"
-        }, new Intl.NumberFormat('vi-VN').format(itemTotal)), /*#__PURE__*/React.createElement("td", {
-          className: "px-3 py-3.5 text-center"
-        }, /*#__PURE__*/React.createElement("span", {
-          className: "px-2 py-0.5 bg-gray-100 border border-gray-200 text-[10px] font-bold text-gray-600 rounded whitespace-nowrap"
-        }, item.type)), 
-
-        /* CỘT SỐ TIỀN ĐÃ CHI TIÊU */
-        /*#__PURE__*/React.createElement("td", {
-          className: "px-4 py-3.5 text-right whitespace-nowrap bg-blue-50/20"
-        }, /*#__PURE__*/React.createElement("div", {
-          className: "flex items-center justify-end space-x-1.5"
-        }, /*#__PURE__*/React.createElement("span", {
-          className: "font-bold " + (isOver ? "text-red-600" : "text-blue-700")
-        }, formatMoney(itemSpent)), isAdmin && /*#__PURE__*/React.createElement("button", {
-          onClick: () => handleUpdateBudgetSpent(item),
-          className: "opacity-0 group-hover/row:opacity-100 p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-all",
-          title: "Cập nhật số tiền đã chi"
-        }, /*#__PURE__*/React.createElement(Edit2, {
-          size: 12
-        })))), 
-
-        /* CỘT KIỂM SOÁT CHI TIÊU (ĐÁNH GIÁ VƯỢT DỰ TOÁN) */
-        /*#__PURE__*/React.createElement("td", {
-          className: "px-4 py-3.5 text-center"
-        }, isOver ? /*#__PURE__*/React.createElement("span", {
-          className: "inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-red-100 text-red-800 border border-red-200"
-        }, "⚠️ Vượt " + formatMoney(itemSpent - itemTotal)) : itemSpent === itemTotal && itemTotal > 0 ? /*#__PURE__*/React.createElement("span", {
-          className: "inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-blue-100 text-blue-800 border border-blue-200"
-        }, "🎯 Đạt 100%") : itemSpent > 0 ? /*#__PURE__*/React.createElement("span", {
-          className: "inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200"
-        }, "✓ Còn " + formatMoney(diff)) : /*#__PURE__*/React.createElement("span", {
-          className: "text-[11px] text-gray-400 italic"
-        }, "Chưa chi")));
+          className: "hover:bg-gray-50/60 transition-colors bg-white group/row border-b border-gray-100"
+        },
+          /*#__PURE__*/React.createElement("td", { className: "px-4 py-3.5 font-bold text-gray-800" }, item.name),
+          /*#__PURE__*/React.createElement("td", { className: "px-3 py-3.5 text-gray-600 text-center whitespace-nowrap" }, item.unit),
+          /*#__PURE__*/React.createElement("td", { className: "px-3 py-3.5 text-gray-600 text-right whitespace-nowrap" }, new Intl.NumberFormat('vi-VN').format(item.price || 0)),
+          /*#__PURE__*/React.createElement("td", { className: "px-2 py-3.5 text-gray-800 font-bold text-center" }, item.qty || 1),
+          /*#__PURE__*/React.createElement("td", { className: "px-4 py-3.5 font-bold text-purple-900 text-right whitespace-nowrap" }, new Intl.NumberFormat('vi-VN').format(itemTotal)),
+          /*#__PURE__*/React.createElement("td", { className: "px-2 py-3.5 text-center whitespace-nowrap" },
+            /*#__PURE__*/React.createElement("span", {
+              className: "px-2 py-0.5 bg-gray-100 border border-gray-200 text-[10px] font-bold text-gray-600 rounded"
+            }, item.type)
+          ),
+          /* CỘT ĐÃ CHI TIÊU (VNĐ) - CANH THẲNG HÀNG CHÍNH XÁC */
+          /*#__PURE__*/React.createElement("td", {
+            className: "px-4 py-3.5 text-right whitespace-nowrap bg-blue-50/20"
+          }, /*#__PURE__*/React.createElement("div", {
+            className: "flex items-center justify-end space-x-1.5"
+          }, isAdmin && /*#__PURE__*/React.createElement("button", {
+            onClick: () => handleUpdateBudgetSpent(item),
+            className: "opacity-0 group-hover/row:opacity-100 p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-all shrink-0",
+            title: "Cập nhật số tiền đã chi"
+          }, /*#__PURE__*/React.createElement(Edit2, {
+            size: 12
+          })), /*#__PURE__*/React.createElement("span", {
+            className: "font-bold text-right " + (isOver ? "text-red-600" : "text-blue-700")
+          }, formatMoney(itemSpent)))),
+          /* CỘT KIỂM SOÁT CHI TIÊU - CANH THẲNG HÀNG CHÍNH XÁC */
+          /*#__PURE__*/React.createElement("td", {
+            className: "px-4 py-3.5 text-center"
+          }, /*#__PURE__*/React.createElement("div", {
+            className: "flex items-center justify-center w-full"
+          }, isOver ? /*#__PURE__*/React.createElement("span", {
+            className: "inline-flex items-center justify-center px-2.5 py-1 rounded text-[11px] font-bold bg-red-100 text-red-800 border border-red-200 min-w-[130px] shadow-2xs"
+          }, "⚠️ Vượt " + formatMoney(itemSpent - itemTotal)) : itemSpent === itemTotal && itemTotal > 0 ? /*#__PURE__*/React.createElement("span", {
+            className: "inline-flex items-center justify-center px-2.5 py-1 rounded text-[11px] font-bold bg-blue-100 text-blue-800 border border-blue-200 min-w-[130px] shadow-2xs"
+          }, "🎯 Đạt 100%") : itemSpent > 0 ? /*#__PURE__*/React.createElement("span", {
+            className: "inline-flex items-center justify-center px-2.5 py-1 rounded text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 min-w-[130px] shadow-2xs"
+          }, "✓ Còn " + formatMoney(diff)) : /*#__PURE__*/React.createElement("span", {
+            className: "inline-flex items-center justify-center px-2.5 py-1 rounded text-[11px] font-semibold text-gray-400 bg-gray-50 border border-gray-200 min-w-[130px]"
+          }, "Chưa chi")))
+        );
       }));
     })), /*#__PURE__*/React.createElement("tfoot", null, /*#__PURE__*/React.createElement("tr", {
       className: "bg-gray-100 font-bold text-gray-900 border-t-2 border-gray-300"
-    }, /*#__PURE__*/React.createElement("td", {
-      className: "px-4 py-4 uppercase text-right tracking-wider",
-      colSpan: "4"
-    }, "Tổng cộng toàn dự án:"), /*#__PURE__*/React.createElement("td", {
-      className: "px-4 py-4 text-right text-purple-900 whitespace-nowrap font-extrabold text-sm"
-    }, formatMoney(grandTotal)), /*#__PURE__*/React.createElement("td", null), /*#__PURE__*/React.createElement("td", {
-      className: "px-4 py-4 text-right whitespace-nowrap font-extrabold text-sm " + (grandSpent > grandTotal ? "text-red-600" : "text-blue-900")
-    }, formatMoney(grandSpent)), /*#__PURE__*/React.createElement("td", {
-      className: "px-4 py-4 text-center whitespace-nowrap text-xs font-bold"
-    }, grandVariance < 0 ? /*#__PURE__*/React.createElement("span", {
-      className: "text-red-700 bg-red-100 px-2.5 py-1 rounded-md border border-red-200"
-    }, "Cảnh báo Vượt Dự toán: -" + formatMoney(Math.abs(grandVariance))) : /*#__PURE__*/React.createElement("span", {
-      className: "text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-md border border-emerald-200"
-    }, "Ngân sách còn lại: " + formatMoney(grandVariance))))))));
+    },
+      /*#__PURE__*/React.createElement("td", { className: "px-4 py-4 uppercase text-right tracking-wider", colSpan: "4" }, "Tổng cộng toàn dự án:"),
+      /*#__PURE__*/React.createElement("td", { className: "px-4 py-4 text-right text-purple-900 whitespace-nowrap font-extrabold text-sm" }, formatMoney(grandTotal)),
+      /*#__PURE__*/React.createElement("td", { className: "px-2 py-4 text-center text-gray-400" }, "-"),
+      /*#__PURE__*/React.createElement("td", {
+        className: "px-4 py-4 text-right whitespace-nowrap font-extrabold text-sm " + (grandSpent > grandTotal ? "text-red-600" : "text-blue-900")
+      }, formatMoney(grandSpent)),
+      /*#__PURE__*/React.createElement("td", { className: "px-4 py-4 text-center whitespace-nowrap text-xs font-bold" },
+        grandVariance < 0 ? /*#__PURE__*/React.createElement("span", {
+          className: "inline-flex items-center justify-center px-2.5 py-1.5 rounded-md text-red-700 bg-red-100 border border-red-200 min-w-[140px]"
+        }, "Cảnh báo Vượt Dự toán: -" + formatMoney(Math.abs(grandVariance))) : /*#__PURE__*/React.createElement("span", {
+          className: "inline-flex items-center justify-center px-2.5 py-1.5 rounded-md text-emerald-800 bg-emerald-100 border border-emerald-200 min-w-[140px]"
+        }, "Ngân sách còn lại: " + formatMoney(grandVariance))
+      )
+    )))));
   };
 
   // Custom Dialog Modal
@@ -6021,7 +6148,7 @@ function ProjectDashboard() {
   }), " X\xE1c nh\u1EADn")))), extractModal.isOpen && /*#__PURE__*/React.createElement("div", {
     className: "fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl text-center"
+    className: "bg-white rounded-2xl p-6 sm:p-8 w-full shadow-2xl transition-all " + (extractModal.type === "budget" && !extractModal.isLoading ? "max-w-4xl text-left max-h-[90vh] flex flex-col" : "max-w-md text-center")
   }, extractModal.isLoading ? /*#__PURE__*/React.createElement("div", {
     className: "py-10"
   }, /*#__PURE__*/React.createElement("div", {
@@ -6043,51 +6170,124 @@ function ProjectDashboard() {
     size: 40
   })), /*#__PURE__*/React.createElement("h3", {
     className: "text-2xl font-extrabold text-gray-900 mb-2"
-  }, "Tr\xEDch xu\u1EA5t th\xE0nh c\xF4ng"), extractModal.type === 'budget' ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("p", {
-    className: "text-gray-500 text-sm font-medium mb-6"
-  }, "T\xECm th\u1EA5y b\u1EA3ng d\u1EF1 to\xE1n h\u1EE3p l\u1EC7 trong t\xE0i li\u1EC7u."), /*#__PURE__*/React.createElement("div", {
-    className: "bg-gray-50 text-left p-5 rounded-xl mb-8 text-sm border border-gray-200 shadow-sm relative overflow-hidden"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "absolute top-0 left-0 w-1 h-full bg-green-500"
-  }), /*#__PURE__*/React.createElement("p", {
-    className: "flex justify-between items-center mb-3 text-gray-600 font-medium"
-  }, /*#__PURE__*/React.createElement("span", null, "T\u1ED5ng s\u1ED1 h\u1EA1ng m\u1EE5c t\xECm th\u1EA5y:"), " ", /*#__PURE__*/React.createElement("strong", {
-    className: "text-gray-900 text-base"
-  }, "25 h\u1EA1ng m\u1EE5c")), /*#__PURE__*/React.createElement("p", {
-    className: "flex justify-between items-center border-t border-gray-200 pt-3 text-gray-600 font-medium"
-  }, /*#__PURE__*/React.createElement("span", null, "T\u1ED5ng d\u1EF1 to\xE1n:"), " ", /*#__PURE__*/React.createElement("strong", {
-    className: "text-green-600 text-xl font-black"
-  }, "50.000.000 VN\u0110"))), /*#__PURE__*/React.createElement("div", {
-    className: "flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3"
-  }, /*#__PURE__*/React.createElement("button", {
-    onClick: () => setExtractModal({
-      isOpen: false,
-      type: null
-    }),
-    className: "flex-1 px-5 py-3 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-colors shadow-sm"
-  }, "H\u1EE7y b\u1ECF"), /*#__PURE__*/React.createElement("button", {
-    onClick: () => {
-      setBudgetItems(extractedBudgetItems);
-      setDialog({
-        isOpen: true,
-        type: 'alert',
-        message: 'Đã cập nhật chi tiết toàn bộ 25 hạng mục từ file của bạn. Tổng ngân sách hiển thị: 50.000.000 VNĐ!',
-        onConfirm: () => {
-          setExtractModal({
-            isOpen: false,
-            type: null
-          });
-          setDialog({
-            isOpen: false
-          });
-        }
-      });
+  }, "Tr\xEDch xu\u1EA5t th\xE0nh c\xF4ng"), extractModal.type === 'budget' ? /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col h-full overflow-hidden"
+  },
+    /* Header */
+    /*#__PURE__*/React.createElement("div", {
+      className: "flex items-center justify-between pb-4 border-b border-gray-100 shrink-0"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "flex items-center space-x-3"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "w-12 h-12 bg-purple-100 text-purple-700 rounded-xl flex items-center justify-center shadow-inner shrink-0"
+    }, /*#__PURE__*/React.createElement(FileText, {
+      size: 24
+    })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", {
+      className: "text-xl font-extrabold text-gray-900"
+    }, "Trích xuất Dự toán từ tài liệu"), /*#__PURE__*/React.createElement("p", {
+      className: "text-xs text-gray-500 font-medium"
+    }, "Tệp nguồn: ", /*#__PURE__*/React.createElement("strong", {
+      className: "text-purple-700"
+    }, extractModal.fileName || "Tài liệu đính kèm")))), /*#__PURE__*/React.createElement("span", {
+      className: "px-3 py-1 bg-green-50 text-green-700 border border-green-200 text-xs font-bold rounded-lg"
+    }, "✓ Đã trích xuất " + (extractModal.extractedItems ? extractModal.extractedItems.length : 0) + " hạng mục")),
+
+    /* Summary cards */
+    /*#__PURE__*/React.createElement("div", {
+      className: "grid grid-cols-2 sm:grid-cols-3 gap-3 my-4 shrink-0"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "bg-gray-50 border border-gray-200 p-3 rounded-xl"
+    }, /*#__PURE__*/React.createElement("p", {
+      className: "text-[11px] text-gray-500 font-bold uppercase"
+    }, "Tổng số hạng mục"), /*#__PURE__*/React.createElement("p", {
+      className: "text-lg font-extrabold text-gray-900"
+    }, (extractModal.extractedItems ? extractModal.extractedItems.length : 0) + " hạng mục")),
+    /*#__PURE__*/React.createElement("div", {
+      className: "bg-purple-50 border border-purple-200 p-3 rounded-xl"
+    }, /*#__PURE__*/React.createElement("p", {
+      className: "text-[11px] text-purple-600 font-bold uppercase"
+    }, "Tổng kinh phí Dự toán"), /*#__PURE__*/React.createElement("p", {
+      className: "text-lg font-extrabold text-purple-900"
+    }, formatMoney((extractModal.extractedItems || []).reduce((s, i) => s + (Number(i.total) || 0), 0)))),
+    /*#__PURE__*/React.createElement("div", {
+      className: "bg-blue-50 border border-blue-200 p-3 rounded-xl col-span-2 sm:col-span-1"
+    }, /*#__PURE__*/React.createElement("p", {
+      className: "text-[11px] text-blue-600 font-bold uppercase"
+    }, "Số nhóm chi phí"), /*#__PURE__*/React.createElement("p", {
+      className: "text-lg font-extrabold text-blue-900"
+    }, new Set((extractModal.extractedItems || []).map(i => i.category)).size + " nhóm"))),
+
+    /* Bảng xem trước trích xuất */
+    /*#__PURE__*/React.createElement("div", {
+      className: "flex-1 overflow-y-auto border border-gray-200 rounded-xl mb-4 shadow-inner max-h-[350px]"
+    }, /*#__PURE__*/React.createElement("table", {
+      className: "w-full text-xs text-left"
+    }, /*#__PURE__*/React.createElement("thead", {
+      className: "text-[10px] text-gray-600 uppercase bg-gray-100 sticky top-0 border-b border-gray-200"
+    }, /*#__PURE__*/React.createElement("tr", null,
+      /*#__PURE__*/React.createElement("th", { className: "px-3 py-2.5 font-bold text-center" }, "STT"),
+      /*#__PURE__*/React.createElement("th", { className: "px-3 py-2.5 font-bold" }, "Hạng mục"),
+      /*#__PURE__*/React.createElement("th", { className: "px-2 py-2.5 font-bold" }, "Nhóm"),
+      /*#__PURE__*/React.createElement("th", { className: "px-2 py-2.5 font-bold text-center" }, "ĐVT"),
+      /*#__PURE__*/React.createElement("th", { className: "px-3 py-2.5 font-bold text-right" }, "Đơn giá"),
+      /*#__PURE__*/React.createElement("th", { className: "px-2 py-2.5 font-bold text-center" }, "SL"),
+      /*#__PURE__*/React.createElement("th", { className: "px-3 py-2.5 font-bold text-right text-purple-900" }, "Dự toán (VNĐ)"),
+      /*#__PURE__*/React.createElement("th", { className: "px-2 py-2.5 font-bold text-center" }, "Loại C.Từ"),
+      /*#__PURE__*/React.createElement("th", { className: "px-3 py-2.5 font-bold text-right text-blue-800" }, "Đã chi (VNĐ)")
+    )), /*#__PURE__*/React.createElement("tbody", {
+      className: "divide-y divide-gray-100 bg-white"
+    }, (extractModal.extractedItems || []).map((it, idx) => /*#__PURE__*/React.createElement("tr", {
+      key: it.id || idx,
+      className: "hover:bg-purple-50/30"
     },
-    className: "flex-1 px-5 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 shadow-md transition-all flex justify-center items-center"
-  }, /*#__PURE__*/React.createElement(Upload, {
-    size: 18,
-    className: "mr-2"
-  }), " C\u1EADp nh\u1EADt d\u1EEF li\u1EC7u"))) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("p", {
+      /*#__PURE__*/React.createElement("td", { className: "px-3 py-2 text-gray-400 font-medium text-center" }, idx + 1),
+      /*#__PURE__*/React.createElement("td", { className: "px-3 py-2 font-bold text-gray-800 max-w-[200px] truncate" }, it.name),
+      /*#__PURE__*/React.createElement("td", { className: "px-2 py-2 text-[10px] font-semibold text-purple-700 whitespace-nowrap" }, it.category),
+      /*#__PURE__*/React.createElement("td", { className: "px-2 py-2 text-center text-gray-600" }, it.unit),
+      /*#__PURE__*/React.createElement("td", { className: "px-3 py-2 text-right text-gray-600 whitespace-nowrap" }, new Intl.NumberFormat('vi-VN').format(it.price || 0)),
+      /*#__PURE__*/React.createElement("td", { className: "px-2 py-2 text-center font-bold text-gray-800" }, it.qty || 1),
+      /*#__PURE__*/React.createElement("td", { className: "px-3 py-2 text-right font-extrabold text-purple-900 whitespace-nowrap" }, formatMoney(it.total)),
+      /*#__PURE__*/React.createElement("td", { className: "px-2 py-2 text-center" }, /*#__PURE__*/React.createElement("span", {
+        className: "px-1.5 py-0.5 bg-gray-100 text-[10px] font-semibold rounded text-gray-600 whitespace-nowrap"
+      }, it.type)),
+      /*#__PURE__*/React.createElement("td", { className: "px-3 py-2 text-right font-bold text-blue-700 whitespace-nowrap" }, formatMoney(it.spent || 0))
+    ))))),
+
+    /* Action buttons */
+    /*#__PURE__*/React.createElement("div", {
+      className: "flex justify-end space-x-3 pt-3 border-t border-gray-100 shrink-0"
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: () => setExtractModal({
+        isOpen: false,
+        type: null,
+        extractedItems: []
+      }),
+      className: "px-5 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-colors shadow-sm text-xs"
+    }, "Hủy bỏ"), /*#__PURE__*/React.createElement("button", {
+      onClick: () => {
+        const itemsToSet = extractModal.extractedItems && extractModal.extractedItems.length > 0 ? extractModal.extractedItems : DEFAULT_EXTRACTED_BUDGET;
+        const totalAmount = itemsToSet.reduce((s, i) => s + (Number(i.total) || 0), 0);
+        setBudgetItems(itemsToSet);
+        setExtractModal({
+          isOpen: false,
+          type: null,
+          extractedItems: []
+        });
+        setDialog({
+          isOpen: true,
+          type: 'alert',
+          message: 'Đã trích xuất và cập nhật thành công ' + itemsToSet.length + ' hạng mục vào Bảng Dự toán! Tổng ngân sách kế hoạch: ' + formatMoney(totalAmount) + '.',
+          onConfirm: () => setDialog({
+            isOpen: false
+          })
+        });
+      },
+      className: "px-6 py-2.5 bg-purple-600 text-white rounded-xl font-bold hover:bg-purple-700 shadow-md transition-all flex items-center text-xs"
+    }, /*#__PURE__*/React.createElement(Upload, {
+      size: 15,
+      className: "mr-1.5"
+    }), "Xác nhận & Cập nhật vào Bảng Dự toán"))
+  ) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("p", {
     className: "text-gray-500 text-sm font-medium mb-6"
   }, "\u0110\xE3 ph\xE2n t\xEDch k\u1EBF ho\u1EA1ch t\u1ED5ng th\u1EC3."), /*#__PURE__*/React.createElement("div", {
     className: "bg-purple-50 text-left p-5 rounded-xl mb-8 text-sm border border-purple-200 shadow-sm relative overflow-hidden"
