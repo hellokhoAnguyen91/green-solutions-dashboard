@@ -3,7 +3,7 @@
 Hệ thống Quản lý Dự án & Báo cáo Tác động Môi trường (EPR & ESG) chuyên nghiệp, tích hợp **Máy chủ Đồng bộ Đa thiết bị (Render Web Service & Realtime API)**.
 
 ## 🚀 Live Demo & Deployment
-- **🌐 Render Web Service (Đồng bộ thời gian thực hai chiều)**: [https://green-solutions-dashboard.onrender.com](https://green-solutions-dashboard.onrender.com)
+- **🌐 Render Web Service (Đồng bộ thời gian thực hai chiều)**: [https://green-solutions-dashboard-swmo.onrender.com](https://green-solutions-dashboard-swmo.onrender.com)
 - **🌐 GitHub Pages (Trực tiếp)**: [https://hellokhoanguyen91.github.io/green-solutions-dashboard/](https://hellokhoanguyen91.github.io/green-solutions-dashboard/)
 - **⚡ Deploy lên Render (1-Click)**:
   
@@ -41,7 +41,7 @@ Hệ thống Quản lý Dự án & Báo cáo Tác động Môi trường (EPR & 
 2. Vào Blueprint hoặc chọn **New +** -> **Web Service**.
 3. Kết nối với repository `hellokhoAnguyen91/green-solutions-dashboard`.
 4. Render sẽ tự động đọc `render.yaml` (`Start Command: node server.js`, `Port: 10000`).
-5. Bấm **Apply / Create Web Service**. Khi trang web hoàn tất, mọi người cùng vào link `https://green-solutions-dashboard.onrender.com` sẽ tự động đồng bộ 100%!
+5. Bấm **Apply / Create Web Service**. Khi trang web hoàn tất, mọi người cùng vào link `https://green-solutions-dashboard-swmo.onrender.com` sẽ tự động đồng bộ 100%!
 
 ### 2. GitHub Pages
 Trang web cũng chạy song song trên GitHub Pages tại:
